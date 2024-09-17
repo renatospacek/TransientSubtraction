@@ -1,0 +1,100 @@
+%\newpage 
+\begin{appendices}
+\section{Asymptotic variance of usual transient estimator}
+\label{app:transient_var}
+%
+We give here a sketch of the proof that the asymptotic variance for the transient estimator \eqref{eq:T_estimator} is indeed \eqref{eq:asym_var_transient}. As in the proof of \cref{prop:var_ts}, it suffices to understand the single-replica estimator, denoted by $\sTest$:
+%
+\begin{equation}
+	\sTest = \frac{1}{\eta}\int_0^T R(X_t^\eta) \, dt.
+\end{equation}
+%
+Consider the Poisson equation% \red{(discuss solvability of Poisson eq below)} %\red{good nice ref computation: gregoire ferre thesis p. 35}
+%
+\begin{equation}
+	-\L\phi = R.
+    \label{eq:poisson_asym_var}
+\end{equation}
+%
+The invertibility of $\L$, and the bounds \eqref{eq:Linv_bound} on its inverse follow from decay estimates from~\cref{as:decay_semigroup}. This means that \eqref{eq:poisson_asym_var} is well-posed and admits a unique solution $\phi \in L^2_0(\mu)$ whenever $R\in L^2_0(\mu)$. \red{not enough to consider $\nabla \phi$; should rely on \cref{as:L_stability} or assume regularity}
+
+Since $\E[\sTest]$ converges to a constant as $T\to+\infty$, its variance is given by
+%
+\begin{align}
+	\frac{1}{T}\Var\paren*{\sTest} = \frac{1}{T}\paren*{\E\bkt*{\abs*{\sTest}^2} - \E\bkt*{\sTest}^2} = \frac{1}{T}\E\bkt*{\abs*{\sTest}^2} + \bigO\paren*{\frac{1}{T}}.
+\end{align}
+%
+Applying It\^o's formula to $\phi$ allows us to write
+%
+\begin{equation}
+	d\phi(X_t) = \L\phi(X_t) \, dt + \sigma^\t \nabla \phi(X_t) \, dW_t.
+\end{equation}
+%
+Integrating in time from $0$ to $T$ then multiplying the result by $1/(\eta\sqrt{T})$ yields
+%
+\begin{equation}
+	\frac{1}{\eta\sqrt{T}}\int_0^T R(X_t) \, dt = \frac{\phi(X_0) - \phi(X_t)}{\eta\sqrt{T}} + \frac{1}{\eta\sqrt{T}}\int_0^T \sigma^\t \nabla\phi(X_t) \, dW_t.
+\end{equation}
+%
+Taking the expectation of the quantity above squared, and applying It\^o isometry to the martingale term gives
+%
+\begin{align}
+	\frac{1}{T}\E\bkt*{\abs*{\frac{1}{\eta}\int_0^T R(X_t) \, dt}^2} = \frac{1}{\eta^2T}\int_0^T\E\bkt*{\nabla\phi(X_t)^\t \sigma\sigma^\t\nabla\phi(X_t)} \, dt + \bigO\paren*{\frac{1}{T}}.
+\end{align}
+%
+Note that the $\bigO(1/T)$ term is indeed bounded since the resolvent $\L^{-1}$ and semigroup $\e^{t\L}$ are bounded operators in $L^2(\mu)$ (again by \cref{as:decay_semigroup}). \red{[gab says about previous sentence (rtp if need be): so what? you already said $\phi\in L^2$. Need to specify distribution of $X_0$ if one wanted to be precise (I suggest not to do so)]} By the ergodicity of the dynamics, it holds that
+%
+\begin{equation}
+	\lim_{T\to+\infty}\frac{1}{\eta^2T}\int_0^T\E\bkt*{\nabla\phi(X_t)^\t \sigma\sigma^\t\nabla\phi(X_t)} \, dt = \frac{1}{\eta^2}\int_\mathcal{X}\nabla\phi(X_t)^\t \sigma\sigma^\t\nabla\phi(X_t) \, d\mu.
+\end{equation}
+%
+Integration by parts then gives the desired result:
+%
+\begin{align}
+	\lim_{T\to+\infty} \frac{\Var(\sTest)}{T} &= \frac{1}{\eta^2}\int_\mathcal{X}\sigma^\t \nabla\phi(X_t)\nabla \phi(X_t)^\t \sigma \, d\mu \\
+	&= \frac{2}{\eta^2}\int_\mathcal{X} \phi(-\L\phi) \, d\mu \\
+	&= \frac{2}{\eta^2}\int_\mathcal{X} R(-\L^{-1}R) \, d\mu,
+\end{align}
+%
+which is precisely \eqref{eq:asym_var_transient}.
+
+\begin{comment}
+\section{Taylor expansions}
+\red{(only the notation part will remain in the final paper; keeping it for now while making precise the details in Prop 1)}
+
+\red{TODO: to be included where relevant in pages}
+
+Let $\nabla^n f = \nabla \otimes (\nabla^{n-1} f)$ denote the $n$th-order derivative tensor (note that $\nabla^2 f$ denotes the Hessian).
+
+Equivalent notations for Taylor expansion remainder:
+%
+\begin{itemize}
+	\item Tensor:
+	%
+	\begin{align}
+		\mathcal{R} = \frac{1}{6} \nabla^3 f\left(\Theta_\eta(x)\right)\cdot (\varphi_1(x)+\eta\varphi_2(x))^{\otimes 3}
+	\end{align}
+	%
+	\item Pointwise:
+	%
+	\begin{align}
+		\mathcal{R} &= \frac{1}{6}\sum_{i=1}^d\sum_{j=1}^d\sum_{m=1}^d \frac{\partial^3 f(\Theta_\eta(x))}{\partial x_i \partial x_j \partial x_k}(\varphi_1+\eta\varphi_2)_i(\varphi_1+\eta\varphi_2)_j(\varphi_1+\eta\varphi_2)_k
+	\end{align}
+	%
+	where $(\varphi_1+\eta\varphi_2)_i = \varphi_{1,i}(x) + \eta\varphi_{2,i}(x)$.
+	%
+	\item Multi-index:
+	%
+	\begin{align}
+		\mathcal{R} &= \sum_{|\alpha|=3} \frac{(\varphi_1(x)+\eta\varphi_2(x))^\alpha}{6}(\partial^\alpha f)(\Theta_\eta(x))
+	\end{align}
+	%
+	with
+	%
+	\begin{gather}
+	\alpha = (\alpha_1,\dotsc,\alpha_m), \qquad |\alpha| = \sum_{i=1}^m \alpha_i, \qquad \alpha_i\in\N \\
+		\partial^\alpha f = \partial_1^{\alpha_1}f\cdots \partial_m^{\alpha_m}f = \frac{\partial^{|\alpha|} f}{\partial x_1^{\alpha_1}\cdots \partial x_m^{\alpha_m}}
+	\end{gather}
+\end{itemize}	
+\end{comment}
+\end{appendices}

@@ -1,0 +1,137 @@
+%%%%% Packages ==============================================
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{authblk}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{comment}
+\setlist[enumerate,1]{label=(\arabic*),ref=\arabic*}
+\setlist[enumerate,2]{label=(\theenumi\alph*),ref=\theenumi\alph*}
+\usepackage{hyperref}
+\hypersetup{%
+    colorlinks=true,
+    citecolor=green,
+    linkcolor=blue,
+    urlcolor=blue,
+}
+\usepackage[capitalise]{cleveref}
+\newcommand{\email}[1]{\href{mailto:#1}{#1}}
+\emergencystretch=1em
+\renewcommand{\arraystretch}{1.1}
+%\mathtoolsset{showonlyrefs}
+
+% For bib and appendix to appear in toc
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage[title,titletoc]{appendix}
+
+\graphicspath{{figures/}}
+
+%%%%% Command definitions ======================================
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\f}{\mathfrak{f}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\X}{\mathcal{X}}
+\renewcommand{\L}{\mathcal{L}}
+\renewcommand{\S}{\mathscr{S}}
+\newcommand{\bigO}{\mathrm{O}}
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\t}{\mathsf T}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand\sn[2]{{#1}\times 10^{#2}}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\DeclarePairedDelimiter\ip{\langle}{\rangle}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\paren{\lparen}{\rparen}
+\DeclarePairedDelimiter\bkt{\lbrack}{\rbrack}
+
+% Colors
+\newcommand\red[1]{\textcolor{red}{#1}}
+\newcommand\blue[1]{\textcolor{blue}{#1}}
+
+% Environment settings
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{corollary}{Corollary}
+\newtheorem{assumption}{Assumption}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{remark}{Remark}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\theoremstyle{definition}
+\newtheorem{example}{Example}[section]
+\newtheorem{case}{Case}
+\crefname{assumption}{Assumption}{Assumptions}
+
+%%%%% Bibliography settings ========================================
+\usepackage[%
+	backend=biber,
+	style=trad-abbrv,
+	url=false,
+	doi=false,
+	isbn=false
+]{biblatex}
+\AtEveryBibitem{%
+    \clearfield{month}
+}
+%\DefineBibliographyStrings{english}{%
+%  editor           = {ed},
+%  editors          = {eds},
+%}
+\DeclareFieldFormat{volume}{volume \textbf{#1}}
+\DeclareFieldFormat[article]{volume}{\textbf{#1}}
+\addbibresource{mybib.bib}
+
+%%%%% Project-specific macros ========================================
+% Misc macros
+\newcommand{\psip}{\widetilde{\mu}_\eta}
+\newcommand{\bLip}{\|b\|_{\rm Lip}}
+\newcommand{\RLip}{\|R\|_{\rm Lip}}
+\newcommand{\mucoup}{\mu_{\rm coup}}
+\newcommand{\Binfz}{B_{n,0}^{\infty}}
+
+% Estimator macros
+\newcommand{\GKest}{\mathcal{\widehat{\rho}}^{T,M}_{\rm GK}}
+\newcommand{\NEMDest}{\mathcal{\widehat{\rho}}^{T,\eta}_{\rm NEMD}}
+\newcommand{\estTmp}{\widehat{\rho}}
+\newcommand{\Test}{\estTmp^{T,M,\eta}_{\rm trans}} % transient
+\newcommand{\sTest}{\estTmp^{T,\eta}_{\rm trans}} % transient (K=1)
+\newcommand{\TSest}{\estTmp^{T,M,\eta}_{\rm sub}} % transient sub.
+\newcommand{\sTSest}{\estTmp^{T,\eta}_{\rm sub}} % transient sub. (K=1)
+\newcommand{\asTSest}{\estTmp^{T,\eta,\alpha}_{\rm sub}} % transient sub. (K=1, \alpha)
+\newcommand{\aTSest}{\estTmp^{T,M,\eta,\alpha}_{\rm sub}} % transient sub. (\alpha)
+
+
+
+
+
+
+
+
+
+

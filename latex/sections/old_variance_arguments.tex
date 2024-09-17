@@ -1,0 +1,121 @@
+\begin{proposition}[Variance of usual transient estimator]
+\label{prop:var_usual_estimator}
+\red{look to see if the variance of $R/T$ has a limit in the asymptotic limit (instead of an upper bound)}
+	\red{refine statement}
+	Suppose Assumptions \red{ref} hold. Then, there exists $C>0$ such that
+	%
+	\begin{equation}
+		\Var(\Test) \leq \frac{CT}{K\eta^2}.
+	\end{equation}
+	%
+\end{proposition}
+
+\textcolor{red}{feb 1 2024: instead of variance proof here, just have a standard asymptotic variance result for time averages; pretty standard, as that'll make the point we need here (i.e. variance for the usual estimator sucks). Something like:
+%
+\begin{equation}
+	\frac{\Var(\Test)}{T} \to_{T\to\infty} \frac{1}{K\eta^2}\int_0^\infty \E(\Pi_\eta R(X_t^\eta)\Pi_\eta R(X_t^\eta)) \, dt
+\end{equation}
+}
+
+\begin{proof}
+It suffices to prove the result when $K=1$:
+%
+\begin{equation}
+	\sTest = \frac{1}{\eta}\int_0^T R(X_t^\eta) \, dt.
+	\label{eq:sT_estimator}
+\end{equation}
+%
+with $\E(\mathcal{R}_t^{T,\eta}) = \alpha_{T,\eta}$. We bound the variance as follows
+%
+\begin{align}
+	\Var(\sTest) &= \E\left[(\mathcal{R}_t^{T,\eta} - \alpha_{T,\eta})^2\right] \leq \E\left((\mathcal{R}_t^{T,\eta})^2\right) \\
+	&= \E\left[\left(\int_0^T \frac{R(X_t^\eta)}{\eta} \, dt\right)^2\right] \\
+	&\leq T\int_0^T \E\left(\frac{R(X_t^\eta)^2}{\eta^2}\right) dt,
+\end{align}
+%
+which is the desired result.
+\end{proof}
+
+\begin{proof}[Proof: correlations-based approach]
+	The variance of the estimator is given by 
+	%
+	\begin{align}
+		\Var(\Test) &= \E((\Test)^2) - \E(\Test)^2 \\
+			&= \E((\Test)^2) - \rho_T^2,
+	\end{align}
+	%
+	where $\rho_T$ denotes the biased (\emph{i.e.} time-truncated) transport coefficient, which converges to a constant in the limit $T\to\infty$. Next, we compute \red{(inner products below on $L^2(\psip)$)}
+	%
+	\begin{align}
+		\E[(\Test)^2] &= \E\left[\left(\frac{1}{\eta}\int_0^T R(X_t^\eta) \, dt\right)^2\right] \\
+		&= \E\left[\frac{2}{\eta^2}\int_0^T\int_0^t R(X_t^\eta)R(X_s^\eta) \, ds \, dt\right] \\
+		&= \frac{2}{\eta^2}\int_0^T\int_0^t \E\left[R(X_t^\eta)R(X_s^\eta)\right] ds \, dt \\
+		&= \frac{2}{\eta^2}\int_0^T\int_0^t \ip*{\e^{t\L}R, \e^{s\L}R} \, ds \, dt \\
+		&= \frac{2}{\eta^2}\int_0^T \ip*{\e^{t\L}R, \L^{-1}\bigl(\e^{t\L} - 1\bigr)R} \, dt \\
+		&= \frac{1}{\eta^2}\int_0^T \ip*{\L^{-1}\bigl(\e^{t\L} - 1\bigr)R, \L^{-1}\bigl(\e^{t\L} - 1\bigr)R} \, dt
+	\end{align}
+\end{proof}
+
+\begin{proof}
+It suffices to prove the result when $K=1$:
+%
+\begin{equation}
+	\sTest = \frac{1}{\eta}\int_0^T R(X_t^\eta) \, dt.
+	\label{eq:sT_estimator}
+\end{equation}
+%
+with $\E(\mathcal{R}_t^{T,\eta}) = \alpha_{T,\eta}$. We bound the variance as follows
+%
+\begin{align}
+	\Var(\sTest) &= \E\left[(\mathcal{R}_t^{T,\eta} - \alpha_{T,\eta})^2\right] \leq \E\left((\mathcal{R}_t^{T,\eta})^2\right) \\
+	&= \E\left[\left(\int_0^T \frac{R(X_t^\eta)}{\eta} \, dt\right)^2\right] \\
+	&\leq T\int_0^T \E\left(\frac{R(X_t^\eta)^2}{\eta^2}\right) dt,
+\end{align}
+%
+which is the desired result.
+
+\tmpbox{
+\red{Different approach, using Poisson/It\^o (which didn't amount to much):} Let $\phi$ be the solution to the Poisson equation
+%
+\begin{equation}
+	-\Lr\phi = R.
+\end{equation}
+%
+By It\^o,
+%
+\begin{align}
+	\mathcal{R}_t^{T,\eta} = \frac{1}{\eta}\int_0^T \Lr\phi(X^\eta_t) \, dt = \frac{\phi(X_0^\eta) - \phi(X_T^\eta)}{\eta} + \frac{1}{\eta}\mathcal{M}_t,
+\end{align}
+%
+with
+%
+\begin{equation}
+	\mathcal{M}_t = \int_0^T \nabla\phi(X_t^\eta)^T\sigma \, dW_t.
+\end{equation}
+%
+By taking expectations, the martingale term vanishes as it's square-integrable (with the usual assumptions), so
+%
+\begin{align}
+	\E(\mathcal{R}_t^{T,\eta}) &= \frac{1}{\eta}\E\left(\phi(X_0^\eta) - \phi(X_T^\eta)\right).
+\end{align}
+%
+We now bound the variance as
+%
+%\begin{align}
+%	\Var(\mathcal{R}_t^{T,\eta}) &\leq \E\left[(\mathcal{R}_t^{T,\eta})^2\right] \\
+%	&\leq \frac{1}{\eta^2}\E\left[\left(\phi(Y_0^\eta) - \phi(Y_T^\eta)\right)^2\right] + \frac{1}{\eta^2}\E(\mathcal{M}_t^2) \\
+%	&\leq \frac{1}{\eta^2}\E\left[\left(\phi(Y_0^\eta) - \phi(Y_T^\eta)\right)^2\right] + C\frac{T}{\eta^2}.
+%	\label{eq:usual_var}
+%\end{align}
+%
+\begin{align}
+	\Var(\mathcal{R}_t^{T,\eta}) &= \E\left[(\mathcal{R}_t^{T,\eta})^2\right] - \E\left[\mathcal{R}_t^{T,\eta}\right]^2 \\
+	&\leq \frac{1}{\eta^2}\E\left[\left(\phi(X_0^\eta) - \phi(X_T^\eta)\right)^2\right] + \frac{1}{\eta^2}\E(\mathcal{M}_t^2) - \frac{1}{\eta^2}\E\left(\phi(X_0^\eta) - \phi(X_T^\eta)\right)^2 \\
+	&\leq \frac{1}{\eta^2}\E\left[\left(\phi(X_0^\eta) - \phi(X_T^\eta)\right)^2\right] + C\frac{T}{\eta^2} - \frac{1}{\eta^2}\E\left(\phi(X_0^\eta) - \phi(X_T^\eta)\right)^2.
+	\label{eq:usual_var}
+\end{align}
+%
+\red{maybe show $\E(M_t^2) \to 0$ as $T\to\infty$?}}
+%
+
+\end{proof}

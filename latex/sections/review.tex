@@ -1,0 +1,177 @@
+\section{Transient method to compute transport coefficients}
+\label{sec:trans_coeff}
+%
+We discuss in this section the definition and computation of transport coefficients, and in particular the use of a transient method for their approximation. We start by presenting in \cref{subsec:gen_setting} the general setting used to compute transport coefficients for a general SDE, then overview their standard numerical approximations and associated numerical difficulties in \cref{subsec:num_tech}. We then introduce the transient method we consider in this work in \cref{subsec:transient}.
+
+\subsection{General setting}
+\label{subsec:gen_setting}
+%
+Consider a general time-homogeneous SDE with additive noise defined on the state-space $\mathcal{X}$, where~$\mathcal{X}$ is typically $\R^d$ or $\T^d$ (with $\T = \R/\Z$ the one-dimensional torus):
+%
+\begin{equation}
+    dX_t = b(X_t) \, dt + \sigma \, dW_t.
+    \label{eq:general_SDE}
+\end{equation}
+%
+where $b\colon \mathcal{X} \to \R^d$ is a smooth function, $\sigma \in \R^{d\times m}$ is a constant matrix and $W_t$ is a standard~$m$-dimensional Brownian motion. We assume that \eqref{eq:general_SDE} admits a unique strong solution (which is the case for instance when $b$ is globally Lipschitz). We restrict ourselves to cases where $\sigma$ is constant, as the dynamics of interest considered later on involve additive noise, namely Langevin dynamics, and also because the coupling method we introduce in \cref{subsec:constructing_method} is much easier to formulate in this setting. The dynamics \eqref{eq:general_SDE} has associated infinitesimal generator
+%
+\begin{equation}
+    \L = b^\t\nabla + \frac{1}{2}\sigma\sigma^\t \colon \nabla^2 = \sum_{i=1}^d b_i\partial_{x_i} + \frac{1}{2}\sum_{i,j=1}^d\sum_{k=1}^m \sigma_{ik}\sigma_{jk} \partial_{x_ix_j}^2,
+    \label{eq:general_generator}
+\end{equation}
+%
+where $\colon$ denotes the Frobenius inner product. Throughout this work, we assume that \eqref{eq:general_SDE} admits a unique invariant probability measure $\mu$ with a positive density with respect to the Lebesgue measure. This assumption is satisfied, for instance, when the generator $\L$ is hypoelliptic and \eqref{eq:general_SDE} admits an invariant probability measure with positive density with respect to the Lebesgue measure \cite{kliemann1987}.
+
+\red{[the following transition is too abrupt; mention first that one adds an external forcing to \eqref{eq:general_SDE} then talk about steady-state averages]} The transport coefficient $\rho$ is defined as the proportionality constant between the steady-state flux of some observable $R$ of interest, and the magnitude of the external forcing needed to induce it, known as the \emph{linear response}; see \cite[Chapter 8]{chandler1987} for an introduction to linear response theory, and for instance \cite[Section 2]{synthetic2023} for a synthetic presentation. The linear response can be reformulated in terms of an integrated time-correlation function, known as the Green--Kubo formula. For simplicity, we do not further recall the framework of linear response theory and instead directly write the Green--Kubo formula:
+%
+\begin{align}
+	\rho = \int_0^{+\infty} \E_\mu(R(X_t) S(X_0)) \, dt,% = \int_\mathcal{X} (-\L^{-1}R)S \, d\mu,
+	\label{eq:gk}
+\end{align}
+%
+where $S \in L^2_0(\mu) = \{\varphi \in L^2(\mu) \, \mid \, \int_\X \varphi \, d\mu = 0\}$ is the conjugate response function (see \cite[Section 5.2.3]{acta_numerica2016} for a precise definition), and where the expectation $\E_\mu$ is taken with respect to all initial conditions~$X_0\sim \mu$, and over all realizations of the dynamics~\eqref{eq:general_SDE}. \red{Note that $R$ and $S$ have average zero with respect to $\mu$. [for $S$ this is true by construction, but it is not obvious; for $R$ it's an assumption.] [say that $R \in L^2(\mu)$ + give conditions for \eqref{eq:gk} to be well-defined; e.g. $\norm{\e^{t\L}}_{\mathcal{B}(L^2_0(\mu))}$ integrable]}
+
+\subsection{Numerical techniques to compute transport coefficients}
+\label{subsec:num_tech}
+%
+Transport coefficients can be numerically estimated using a variety of techniques. Generally, such techniques fall into one of three main categories (see \cite{acta_numerica2016,mcqmc_stoltz2022} for a detailed discussion and numerical comparison):
+%
+%\begin{comment}
+    \begin{enumerate}
+    \item {\bf Equilibrium techniques based on the Green--Kubo formula \eqref{eq:gk}.} In order to numerically realize \eqref{eq:gk}, one constructs an estimator by (i) truncating the time-integral to finite integration time $T$; and (ii) approximating the expectation with an average over $M$ independent trajectories of the system $(X_t^m)_{t\geq 0}$ with $1\leq m\leq M$. This leads to the following natural estimator:
+    %
+    \begin{equation}
+        \GKest = \frac{1}{M}\sum_{m=1}^M \int_0^T R(X_t^m)S(X_0^m) \, dt.
+        \label{eq:GK_estimator}
+    \end{equation}
+    %
+    The sources of error associated with the estimator \eqref{eq:GK_estimator} are
+    %
+    \begin{itemize}
+    	\item A statistical error $\bigO(T)$, which scales linearly with the time lag \cite{oliveira2017,sensitivity2022,raphael}, and is typically the largest source of error;
+    	\item An integration time truncation bias, which is small as correlations are typically exponentially decaying (as discussed in \cite{sensitivity2022});
+    	\item A discretization bias, which arises from the finiteness of the timestep used to discretize~\eqref{eq:general_SDE}, and from quadrature formulas for the time integral \cite{averages2016,acta_numerica2016}.
+    \end{itemize}
+    %
+    The various sources of error suggest carefully choosing $T$ in order to minimize the error as a tradeoff between $T$ large enough for the time truncation bias to be small, but not too large in order to limit the increase in variance.
+    
+    \item {\bf Nonequilibrium steady-state techniques.} This method is based on linear response theory. It amounts to permanently adding an external forcing to the system, which induces a nonzero flux in the steady-state. The transport coefficient is then obtained by diving the average flux by the magnitude of the perturbation, for small values of the perturbation in order to ensure one stays in the linear response regime.
+       
+   There are several sources of error associated with this technique. In particular, the main concern is the statistical error, much larger than the usual asymptotic variance for standard time averages due to the small magnitude of the forcing. See \cite[Section 5]{acta_numerica2016}, \cite[Section 2]{synthetic2023} and \cite[Section 3]{averages2016} for a more detailed discussion on the numerical analysis of nonequilibrium methods.
+   
+    \item {\bf Transient methods.} While both Green--Kubo and nonequilibrium methods are based on steady-state dynamics, transient methods provide an alternative framework by monitoring the system’s relaxation to a steady-state after an initial perturbation, and can be classified into two main approaches:
+    
+    \begin{enumerate}%[label=(\arabic{enumi}\alph*)]
+        \item {\bf Equilibrium relaxation:} A typical scenario is to perturb an equilibrium system by creating an initial profile of momentum or energy, for instance, which is then allowed to relax to an equilibrium steady-state through the time-evolution of the equilibrium dynamics. During relaxation, the corresponding transient profiles are monitored, which are often fit to a macroscopic effective PDE parametrized by the transport coefficient at hand in order to estimate this transport coefficient by some form of ''inverse problem fitting``. Examples include the method proposed in \cite{hulse2005} to compute the thermal conductivity, the momentum impulse relaxation method \cite{MIR2000}, and the approach-to-equilibrium molecular dynamics method \cite{AEMD2013}.
+                
+        \item {\bf Nonequilibrium relaxation:} In a somewhat dual approach, one can alternatively start with an equilibrium system and drive it towards a nonequilibrium steady-state by applying an external forcing to the dynamics. The relaxation to a nonequilibrium steady-state is then monitored, from which the transport coefficient can be obtained. One example is the transient-time-correlation function (TTCF) method \cite{TTCF1987,TTCF1988}, which generalizes the Green--Kubo relations to nonlinear regimes.
+    \end{enumerate}
+\end{enumerate}
+%\end{comment}
+%
+\begin{comment}
+\paragraph{Equilibrium techniques based on the Green--Kubo formula \eqref{eq:gk}.} In order to numerically realize \eqref{eq:gk}, one constructs an estimator by (i) truncating the time-integral to finite integration time $T$; and (ii) approximating the expectation with an average over $M$ independent trajectories of the system $(X_t^m)_{t\geq 0}$ with $1\leq m\leq M$. This leads to the following natural estimator:
+%
+\begin{equation}
+    \GKest = \frac{1}{M}\sum_{m=1}^M \int_0^T R(X_t^m)S(X_0^m) \, dt.
+    \label{eq:GK_estimator}
+\end{equation}
+%
+The sources of error associated with the estimator \eqref{eq:GK_estimator} are
+%
+\begin{itemize}
+	\item A statistical error $\bigO(T)$, which scales linearly with the time lag \cite{oliveira2017,sensitivity2022,raphael}, and is typically the largest source of error;
+	\item An integration time truncation bias, which is small as correlations are typically exponentially decaying (as discussed in \cite{sensitivity2022});
+	\item A discretization bias, which arises from the finiteness of the timestep used to discretize~\eqref{eq:general_SDE}, and from quadrature formulas for the time integral \cite{averages2016,acta_numerica2016}.
+\end{itemize}
+%
+The various sources of error suggest carefully choosing $T$ in order to minimize the error as a tradeoff between $T$ large enough for the time truncation bias to be small, but not too large in order to limit the increase in variance.
+
+\paragraph{Nonequilibrium steady-state techniques.} This method is based on linear response theory. It amounts to permanently adding an external forcing to the system, which induces a nonzero flux in the steady-state. The transport coefficient is then obtained by diving the average flux by the magnitude of the perturbation, for small values of the perturbation in order to ensure one stays in the linear response regime.
+   
+There are several sources of error associated with this technique. In particular, the main concern is the statistical error, much larger than the usual asymptotic variance for standard time averages due to the small magnitude of the forcing. See \cite[Section 5]{acta_numerica2016}, \cite[Section 2]{synthetic2023} and \cite[Section 3]{averages2016} for a more detailed discussion on the numerical analysis of nonequilibrium methods.
+
+\paragraph{Transient methods.} While both Green--Kubo and nonequilibrium methods are based on steady-state dynamics, transient methods provide an alternative framework by monitoring the system’s relaxation to a steady-state after an initial perturbation, and can be classified into two main approaches:
+
+\begin{enumerate}
+    \item {\bf Equilibrium relaxation:} A typical scenario is to perturb an equilibrium system by creating an initial profile of momentum or energy, for instance, which is then allowed to relax to an equilibrium steady-state through the time-evolution of the equilibrium dynamics. During relaxation, the corresponding transient profiles are monitored, which are often fit to a macroscopic effective PDE parametrized by the transport coefficient at hand in order to estimate this transport coefficient by some form of "inverse problem fitting". Examples include the method proposed in \cite{hulse2005} to compute the thermal conductivity, the momentum impulse relaxation method \cite{MIR2000}, and the approach-to-equilibrium molecular dynamics method \cite{AEMD2013}.
+            
+    \item {\bf Nonequilibrium relaxation:} In a somewhat dual approach, one can alternatively start with an equilibrium system and drive it towards a nonequilibrium steady-state by applying an external forcing to the dynamics. The relaxation to a nonequilibrium steady-state is then monitored, from which the transport coefficient can be obtained. One example is the transient-time-correlation function (TTCF) method \cite{TTCF1987,TTCF1988}, which generalizes the Green--Kubo relations to nonlinear regimes.
+\end{enumerate}
+\end{comment}
+The limitations and drawbacks listed above suggest that there is space for alternative approaches, in particular in the context of variance reduction; this motivates the construction of the transient subtraction method.
+
+%===================================================================================
+\subsection{Transient dynamics method}
+\label{subsec:transient}
+%
+As discussed in Section \ref{subsec:num_tech}, an alternative approach to the NEMD and GK methods for computing transport coefficients is based on transient dynamics. The fundamental idea is that, instead of applying an external forcing to the dynamics, or computing correlations for the equilibrium dynamics, we start from an initially perturbed system, and monitor its relaxation to steady-state by evolving equilibrium dynamics.
+
+\paragraph{Mathematical formulation.} The transient method relies on two main ingredients: (i) perturbing the distribution of initial conditions at order $\bigO(\eta)$ with $\eta\ll 1$; and (ii) monitoring return to stationarity via time integration. More precisely, we consider a process $X_t^\eta$ which evolves according to the reference dynamics \eqref{eq:general_SDE}, with $X_0^\eta \sim \psip$. The probability measure $\psip$ is assumed to be a first-order perturbation of the invariant probability measure of the reference dynamics $\mu$, satisfying
+%
+\begin{equation}
+	\psip = (1+\eta S)\mu + \bigO(\eta^2).
+	\label{eq:init_dist}
+\end{equation}
+%
+We then evolve the process $X_t^\eta$ according to the reference equilibrium dynamics, which relaxes over time to its equilibrium steady-state. In particular, although not immediately clear, the time integral of the expectation of $R(X_t^\eta)$, when divided by $\eta$, converges to the transport coefficient $\rho$ as $\eta$ goes to 0:
+%
+\begin{equation}
+	\rho = \lim_{\eta\to 0} \frac{1}{\eta}\int_0^{+\infty} \E(R(X_t^\eta)) \, dt.
+	\label{eq:transient_def}
+\end{equation}
+%
+To motivate the equality \eqref{eq:transient_def}, we consider finite $\eta\ll 1$. By writing the expectation in terms of the semigroup, and using that $\e^{t\L}R$ has average 0 with respect to $\mu$ (by the invariance of $\mu$ by the dynamics and the fact that $R$ has average 0 with respect to $\mu$), we have, informally,
+%
+%\red{this computation below is also informal and just used to motivate the discussion, and is also made precise in \cref{prop:gen_subtraction}}
+%
+\begin{align}
+    \label{eq:gk_equiv1}
+	\frac{1}{\eta}\int_0^{+\infty} \E(R(X_t^\eta)) \, dt &= \frac{1}{\eta} \int_0^{+\infty} \int_\mathcal{X} \bigl(\e^{t\L} R\bigr) \, d\psip \, dt \\
+	&= \frac{1}{\eta}\int_0^{+\infty} \int_\mathcal{X} \e^{t\L} R \, d\mu \, dt + \int_0^{+\infty} \int_\mathcal{X} \bigl(\e^{t\L} R\bigr) S \, d\mu \, dt + \bigO(\eta) \\
+	&= \int_0^{+\infty} \int_\mathcal{X} \bigl(\e^{t\L} R\bigr) S \, d\mu \, dt + \bigO(\eta) \\
+	&= \int_0^{+\infty} \E_\mu\bigl(R(X_t)S(X_0)\bigr) dt + \bigO(\eta).
+    \label{eq:gk_equiv2}
+\end{align}
+%
+It is clear that by letting $\eta\to 0$ we get the correct result, \emph{i.e.} \eqref{eq:transient_def} is equivalent to the Green--Kubo formula \eqref{eq:gk}:
+%
+\begin{equation}
+	\lim_{\eta\to 0}\frac{1}{\eta}\int_0^{+\infty} \E(R(X_t^\eta)) \, dt = \int_0^{+\infty} \E_\mu(R(X_t) S(X_0)) \, dt.
+	\label{eq:td_gk}
+\end{equation}
+%
+We recall that $\E_\mu$ denotes the expectation with respect to the reference dynamics started at equilibrium, while $\E$ on the left-hand side denotes the expectation with respect to the reference dynamics initialized as $X_0^\eta \sim \psip$.
+
+The above discussion is an informal presentation of the method, and is done for motivational purposes; see \cref{prop:gen_subtraction} for the formal meaning of the initial distribution \eqref{eq:init_dist}, and the rigorous form of the computation \eqref{eq:gk_equiv1}-\eqref{eq:gk_equiv2}.  
+
+
+\paragraph{Estimators of transient dynamics.} In practice, numerically estimating \eqref{eq:transient_def} requires first approximating the limit with (sufficiently small) finite $\eta$, truncating the time integral to finite $T$, and approximating the expectation with an average over $M$ realizations of the dynamics started from i.i.d. initial conditions $X_0\sim\psip$. This leads to the following estimator for \eqref{eq:transient_def}:
+%
+\begin{equation}
+	\Test = \frac{1}{\eta M}\sum_{m=1}^M \int_0^T R(X_t^{\eta,m}) \, dt.	
+	\label{eq:T_estimator}
+\end{equation}
+%
+Although these approximations lead to several sources of bias in \eqref{eq:T_estimator}, which are made precise in Section \ref{subsubsec:bias_analysis}, the primary concern associated with \eqref{eq:T_estimator} is its very large variance, as we discuss next. This disqualifies it as an appropriate numerical method.
+
+\paragraph{Asymptotic variance of usual transient estimator.} The asymptotic variance of the estimator~\eqref{eq:T_estimator} is
+%
+\begin{equation}
+	\lim_{T\to+\infty} T^{-1}\Var\bigl(\Test\bigr) = \frac{2}{M\eta^2}\int_\mathcal{X} R\paren*{-\L^{-1} R} \, d\mu.
+	\label{eq:asym_var_transient}
+\end{equation}
+%
+It corresponds to the usual asymptotic variance for time averages of ergodic equilibrium dynamics, except for the very large prefactor $1/\eta^2$; see Appendix~\ref{app:transient_var} for a sketch of the proof.
+
+Unlike the usual NEMD or Green--Kubo estimators of transport coefficients discussed in Section~\ref{subsec:num_tech}, the variance of~\eqref{eq:T_estimator} is magnified by two distinct contributions. First, as with NEMD, we divide~\eqref{eq:T_estimator} by $\eta\ll 1$ which gives rise to the $\bigO(\eta^{-2})$ factor. Second, since the estimator is not a time average but a time integral as with GK, the variance also scales linearly in~$T$, as opposed to the typical scaling~$\bigO(1/T)$ for time-averages. This leads to variance of order~$\bigO(T\eta^{-2})$, much higher than its NEMD and GK counterparts (although if $T=\bigO(1)$, the transient method is comparable to NEMD).
+
+This result calls for modifying the estimator with the use of variance reduction techniques, in particular to get rid of the $\eta^{-2}$ contribution. To this end, we consider the use of \emph{couplings} as a control variate, which are discussed more precisely in the next section.
+%
+
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage{config}
+
+\title{\bf Transient subtraction: A control variate method for computing transport coefficients}
+\author[1]{Pierre Monmarch\'e$^{a,}$}
+\author[2,3]{Renato Spacek$^{b,}$}
+\author[3,2]{Gabriel Stoltz$^{c,}$}
+\affil[ ]{\footnotesize $^a$\email{pierre.monmarche@sorbonne-universite.fr},
+                        $^b$\email{renato.spacek@enpc.fr},
+                        $^c$\email{gabriel.stoltz@enpc.fr}}
+\affil[1]{\footnotesize LJLL and LCT, Sorbonne Universit\'e, Paris, France}
+\affil[2]{\footnotesize MATHERIALS team, Inria Paris, France}
+\affil[3]{\footnotesize CERMICS, \'Ecole des Ponts, France}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In molecular dynamics, transport coefficients measure the sensitivity of the invariant probability measure of the stochastic dynamics at hand with respect to some perturbation. They are typically computed using either the linear response of nonequilibrium dynamics, or the Green--Kubo formula. The estimators for both approaches have large variances, which motivates the study of variance reduction techniques for computing transport coefficients. We present an alternative approach, called the \emph{transient subtraction technique} (inspired by early work by Ciccotti and Jaccucci in 1975), which amounts to simulating a transient dynamics, from which we subtract a sensibly coupled equilibrium trajectory, resulting in an estimator with smaller variance. We present the mathematical formulation of the transient subtraction technique, give error estimates on the bias and variance of the associated estimator, and demonstrate the relevance of the method through numerical illustrations for various systems. 
+\end{abstract}
+
+\tableofcontents
+%\newpage
+%
+\section*{TODOs}
+\begin{itemize}
+	\item \red{fix indexing notation all throughout ($f_{ij}$ vs $f_{i,j}$ etc)}
+	\item \red{make sure $\nabla^*$ and associated adjoint operators are defined and explicit forms given}
+	\item \red{replicas to be changed from $m$ to something else}
+	\item \red{spacing after period for i.e. and e.g.}
+	\item \red{reread transient review in intro and num\_tech}
+	\item \red{round/homogenize table values}
+	\item \red{check scaling for LJ in molly: $\sigma$ vs $2^{1/6}\sigma$}
+\end{itemize}
+
+%\newpage
+\input{sections/intro.tex}
+%\newpage
+\input{sections/review.tex}
+%\newpage 
+\input{sections/transient.tex}
+%\newpage
+\input{sections/numerical.tex}
+%\newpage 
+\input{sections/conclusion.tex}
+%\newpage 
+\input{sections/appendix.tex}
+%\newpage 
+\printbibliography
+
+\end{document}

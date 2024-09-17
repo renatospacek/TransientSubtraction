@@ -1,0 +1,88 @@
+
+\begin{proposition}[{\bf Variance of transient subtraction estimator}]
+	\label{prop:var_ts}
+	Suppose that Assumption \ref{as:contractivity} holds and that $R$ is globally Lipschitz with Lipschitz constant $\RLip$. Then, for any $T>0$,
+	%
+	\begin{equation}
+		\Var\paren*{\aTSest} \leq \frac{\RLip^2}{MB^2}\frac{\E\bkt*{|X_0^\eta - Y_0^0|^2}}{\eta^2}\e^{2T\max(B,0)}.
+%		\Var(\TSest) \leq \frac{\E[|\delta_0^\eta|^2]\RLip^2}{KB^2}.\frac{\e^{2T\max(B,0)}}{K},
+	\label{eq:var_prop_bound}
+	\end{equation}
+	%
+\end{proposition}
+%
+In particular, when the functions $\varphi_1,\varphi_2$ (defined in \eqref{eq:varphi1_PDE} and \eqref{eq:varphi2_PDE}, respectively) belong to $L^2(\mu)$, it holds that
+%
+\begin{equation}
+	\frac{\E\bkt*{\abs{X_0^\eta - Y_0^0}^2}}{\eta^2} = 
+	\begin{cases}
+		\norm{\varphi_1}^2_{L^2(\mu)} &\text{if }\alpha = 1, \\
+		\norm{\varphi_1 + \eta\varphi_2}^2_{L^2(\mu)} &\text{if }\alpha = 2.
+	\end{cases}
+	%\leq C_1 + \eta C_2 + \eta^2 C_3.
+	\label{eq:delta0_var_statement}
+\end{equation}
+%
+%	Furthermore, if $B<0$, then variance is uniformly bounded:
+%	%
+%	\begin{equation}
+%		\Var(\TSest) \leq \frac{C_1}{K}.
+%	\end{equation}
+%	%
+%
+Plugging \eqref{eq:delta0_var_statement} into \eqref{eq:var_prop_bound} immediately implies a bound on the variance uniform in the perturbation parameter $|\eta| \leq \eta_*$.
+
+For this result, we do not consider the asymptotic variance as with the transient estimator in Section \ref{subsec:transient}, as we cannot observe the $T\to+\infty$ limit due to the couplings we consider. As discussed in Section \ref{subsubsec:synchronous_coup}, the dynamics will decouple at large times, leading to a substantial increase in variance. We thus want to truncate the integration time $T$.
+%
+%This result shows that the variance is uniformly bounded in $\eta$. In particular, this is due to the fact that the initial coupling distance is of order 1.
+
+\begin{remark}[{\bf Comparison with transient method}]
+%	As we discussed in Section \ref{subsubsec:synchronous_coup}, 
+	Variance reduction is obtainable for synchronous coupling even without strong conditions. In particular, when we have no dissipativity, the subtraction technique is better than the usual transient method discussed in \cref{subsec:transient} provided that~$\e^{2BT} \ll T/\eta^2$, \emph{i.e.} $T\ll -\log(\eta)/B$. As one would typically consider $\eta\ll 1$, this suggests that the subtraction technique should therefore be preferred. 
+\end{remark}
+
+\begin{proof}
+\red{clean presentation at the end}
+
+It suffices to consider the estimator \eqref{eq:ts_estimator} for $M=1$, since $\Var(\aTSest) = M^{-1}\Var(\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub})$. To simplify the notation, we write $\asTSest$ instead of $\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub}$:
+	%
+	\begin{equation}
+		\asTSest = \frac{1}{\eta}\int_0^T (R(X_t^\eta) - R(Y_t^0)) \, dt.
+	\end{equation}
+	%
+	Since $R$ is Lipschitz, and using \cref{lemma:decoupling_times} to bound the coupling distance $|X_t^\eta - Y_t^0|$ in terms of the initial distance $|X_0^\eta - Y_0^0|$, we have
+	%
+	\begin{align}
+		\label{eq:rhoLipschitz}
+		\abs*{\asTSest} \leq \RLip \int_0^T \frac{|X_t^\eta - Y_t^0|}{\eta} \, dt \leq \RLip \int_0^T \frac{\e^{tB}|X_0^\eta - Y_0^0|}{\eta} \, dt.
+%		&= \frac{\RLip}{B}\frac{|X_0^\eta - Y_0^\eta|}{\eta}(\e^{TB} - 1).
+	\end{align}
+	%
+	We bound the variance as
+	%
+	\begin{align}
+		\Var\paren*{\asTSest} = \E\bkt*{\abs*{\asTSest - \E[\asTSest]^2}^2} \leq \E\bkt*{\abs*{\asTSest}^2} = \RLip^2\E\bkt*{\abs*{\int_0^T \frac{\e^{tB}|X_0^\eta - Y_0^0|}{\eta} \, dt}^2}.
+		\label{eq:var_integral_bound}
+	\end{align}
+	%
+	To make precise the bounds above, we distinguish the between the cases $B\ne 0$ and $B=0$.
+	
+	\paragraph{Case $B\ne 0$.} Evaluating the integral in \eqref{eq:var_integral_bound} leads to
+	%
+	\begin{align}
+		\Var\paren*{\asTSest} \leq \E\bkt*{\frac{\RLip^2}{B^2}\frac{|X_0^\eta - Y_0^\eta|^2}{\eta^2}(\e^{TB}-1)^2},
+		%\leq \frac{\RLip^2}{B^2}\frac{\E\bkt*{|X_0^\eta - Y_0^0|^2}}{\eta^2}\e^{2T\max(B,0)},%\max\paren*{\e^{2TB},1}.
+%		&= C_1(\e^{2Bt} - 2\e^{Bt} + 1),
+		\label{eq:ts_var_int}
+	\end{align}
+	%
+	with the desired bound \eqref{eq:var_prop_bound} obtained by noting that $(\e^{TB}-1)^2$ is bounded by $\e^{2BT}$ for $B>0$, and by 1 for $B<0$.
+	
+	\paragraph{Case $B = 0$.} Similarly, evaluating the integral in \eqref{eq:var_integral_bound} yields the following bound
+	%
+	\begin{align}
+		\Var\paren*{\asTSest} \leq \E\bkt*{T^2\RLip^2\frac{|X_0^\eta - Y_0^\eta|^2}{\eta^2}}
+		%\leq \frac{\RLip^2}{B^2}\frac{\E\bkt*{|X_0^\eta - Y_0^0|^2}}{\eta^2}\e^{2T\max(B,0)}.
+	\end{align}
+	%
+	 Noting that $\lim_{B\to 0} (\e^{TB} - 1)^2/B^2 = T^2$, this case should be understood as the limit as $B\to 0$, leading to \eqref{eq:var_prop_bound}.	This concludes the proof.	

@@ -1,0 +1,15 @@
+\section{Conclusion and perspectives}
+\label{sec:conclusion}
+%
+\paragraph{Limitations/method.} 
+
+\paragraph{Extensions.} 
+
+The numerical results in \cref{sec:numerical} show significant variance-reduction potential, suggesting this method is viable as its implementation is neither complex nor expensive; in fact, it is roughly twice the cost of a typical run due to the control system. For general systems, the bottleneck lies in the construction of the transformation~$\Phi_\eta$, as the PDEs \eqref{eq:varphi1_PDE} and \eqref{eq:varphi2_PDE} might not have a readily available solution for some given $S$ of interest. 
+
+One possible direction for extensions is to explore other types of couplings. For the systems we considered, synchronous coupling was largely successful in keeping the trajectories sufficiently close during the transient relaxation. For the shear viscosity example, relaxation and decoupling almost coincided, which suggests that a less dissipative system is likely to undergo decoupling significantly before convergence. Such scenarios motivate exploring more robust coupling strategies to delay decoupling.
+
+\red{need more refs: kinetic couplings (monmarche/chak) etc}
+
+\red{moved from sec 4 discussion of shear: "suggesting it is a viable methodology given that the implementation is reasonably easy
+}
