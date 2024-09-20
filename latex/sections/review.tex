@@ -29,7 +29,7 @@ where $\colon$ denotes the Frobenius inner product. Throughout this work, we ass
 	\label{eq:gk}
 \end{align}
 %
-where $S \in L^2_0(\mu) = \{\varphi \in L^2(\mu) \, \mid \, \int_\X \varphi \, d\mu = 0\}$ is the conjugate response function (see \cite[Section 5.2.3]{acta_numerica2016} for a precise definition), and where the expectation $\E_\mu$ is taken with respect to all initial conditions~$X_0\sim \mu$, and over all realizations of the dynamics~\eqref{eq:general_SDE}. \red{Note that $R$ and $S$ have average zero with respect to $\mu$. [for $S$ this is true by construction, but it is not obvious; for $R$ it's an assumption.] [say that $R \in L^2(\mu)$ + give conditions for \eqref{eq:gk} to be well-defined; e.g. $\norm{\e^{t\L}}_{\mathcal{B}(L^2_0(\mu))}$ integrable]}
+where $S \in L^2_0(\mu) = \{\varphi \in L^2(\mu) \, \mid \, \int_\X \varphi \, d\mu = 0\}$ is the conjugate response function (see \cite[Section 5.2.3]{acta_numerica2016} for a precise definition), and where the expectation $\E_\mu$ is taken with respect to all initial conditions~$X_0\sim \mu$, and over all realizations of the dynamics~\eqref{eq:general_SDE}. Note that $R$ and $S$ have average zero with respect to $\mu$. The observable $R$ is assumed to have average 0 with respect to $\mu$, as it can always be recentered in case it has nonzero average. The conjugate response $S$ has average 0 by construction.% [for $S$ this is true by construction, but it is not obvious; for $R$ it's an assumption.] [say that $R \in L^2(\mu)$ + give conditions for \eqref{eq:gk} to be well-defined; e.g. $\norm{\e^{t\L}}_{\mathcal{B}(L^2_0(\mu))}$ integrable]}
 
 \subsection{Numerical techniques to compute transport coefficients}
 \label{subsec:num_tech}
@@ -114,7 +114,7 @@ As discussed in Section \ref{subsec:num_tech}, an alternative approach to the NE
 	\label{eq:init_dist}
 \end{equation}
 %
-We then evolve the process $X_t^\eta$ according to the reference equilibrium dynamics, which relaxes over time to its equilibrium steady-state. In particular, although not immediately clear, the time integral of the expectation of $R(X_t^\eta)$, when divided by $\eta$, converges to the transport coefficient $\rho$ as $\eta$ goes to 0:
+We then evolve the process $X_t^\eta$ according to the reference equilibrium dynamics, which relaxes over time to its equilibrium steady-state. In particular, although not immediately clear, the time integral of the expectation of $R(X_t^\eta)$, when divided by $\eta$, converges to the transport coefficient $\rho$ as $\eta$ goes to~$0$:
 %
 \begin{equation}
 	\rho = \lim_{\eta\to 0} \frac{1}{\eta}\int_0^{+\infty} \E(R(X_t^\eta)) \, dt.

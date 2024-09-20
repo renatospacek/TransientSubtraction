@@ -348,9 +348,9 @@ We refer for instance to \cite[Section 2]{acta_numerica2016} for a discussion on
 \subsubsection{Analysis of the bias}
 \label{subsubsec:bias_analysis}
 %
-There are several sources of bias arising from the estimator~\eqref{eq:ts_estimator}, such as the time truncation and time discretization bias when considering numerical schemes to integrate the dynamics. Quantifying such biases is standard practice for estimators of this form. Additionally, there is a bias arising from the finiteness of $\eta$, which is the main result of this section. This is made precise in \cref{prop:gen_subtraction} below, where we consider second-order corrections in $\eta$. 
+There are several sources of bias arising from the estimator~\eqref{eq:ts_estimator}, such as the time truncation and time discretization bias when considering numerical schemes to integrate the dynamics. Quantifying such biases is standard practice for estimators of this form. Additionally, there is a bias arising from the finiteness of $\eta$, which is the main result of this section. This is made precise in \cref{prop:gen_subtraction} below, where we consider second-order corrections in $\eta$. \red{bothering me: its not the bias from just finite $\eta$ (i mean, it is but this is misleading). The more underlying fundamental reason is the coupling measure, which coincides up to 1st order (or 2nd). In fact, prop 1 is stated for a genera quantity employing the map, not just our observable (hence $f\circ \Phi$ for any $f$ and not just the expectation of some observable}
 
-To state the result, we define by $\mathcal{A}^*$ the adjoint of a closed operator $\mathcal{A}$ on $L^2(\mu)$: for any test functions~$\varphi, \phi \in C^\infty$ with compact support,
+Before stating the result, we denote by $\mathcal{A}^*$ the adjoint of a closed operator $\mathcal{A}$ on $L^2(\mu)$: for any test functions~$\varphi, \phi \in C^\infty$ with compact support,
 %
 \begin{equation}
     \int_\mathcal{X} (\mathcal{A}\varphi)\phi \, d\mu = \int_\mathcal{X} \varphi(\mathcal{A}^*\phi) \, d\mu.
@@ -427,7 +427,7 @@ with $\alpha=1$ or $\alpha=2$, and
 The smoothness condition on $f$ can be weakened, as it would be enough to have derivatives of $f$ up to order 3 in $B^\infty_m$. In order to simplify the presentation of the result, however, we suppose~$f\in \S$ here.
 \end{remark}
 
-This result states that the finite $\eta$ bias in the linear response is of order~$\bigO(\eta^{\alpha})$ for a map $\Phi_\eta$ which includes well-chosen terms up to order $\bigO(\eta^\alpha)$. It is of course possible to construct higher-order corrections in order to decrease the bias. The associated PDEs for the corresponding $\varphi_i$ terms, however, become increasingly cumbersome to solve, rendering it an impractical approach.
+This result states that the finite $\eta$ bias in the linear response is of order~$\bigO(\eta^{\alpha})$ for a map $\Phi_\eta$ which includes well-chosen terms up to order $\bigO(\eta^\alpha)$. It is of course possible to construct higher-order corrections in order to further decrease the bias. The associated PDEs for the corresponding $\varphi_i$ terms, however, become increasingly cumbersome to solve, rendering it an impractical approach. In any case, a second-order map leads to an estimator with $\bigO(\eta^2)$ bias, which is sufficiently small in general.
 
 \begin{remark}[{\bf Well-posedness of PDEs}]
 Although \eqref{eq:varphi1_PDE} might look difficult to solve, one can show that it admits gradient solutions of the form $\varphi_1 = \nabla\psi$ under some conditions on $\mu$. Indeed, \eqref{eq:varphi1_PDE} can then be written as
@@ -577,7 +577,7 @@ where $\aTSest$ is defined as \eqref{eq:ts_estimator} with the dynamics \eqref{e
 %
 \end{corollary}
 
-This result, obtained as a direct consequence of Proposition \ref{prop:gen_subtraction}, shows that the bias of the transient (subtraction) technique has an exponentially decaying bias term from the time truncation, as in the Green--Kubo method, however magnified by a $\eta^{-1}$ factor; and, in addition, a bias of order~$\eta^\alpha$.
+This result, obtained as a direct consequence of Proposition \ref{prop:gen_subtraction}, shows that the bias of the transient (subtraction) technique has two distinct contributions: an exponentially decaying bias term arising from the time truncation, as in the Green--Kubo method (however magnified by a $\eta^{-1}$ factor); and a bias of order~$\eta^\alpha$ due to the finiteness of $\eta$, corresponding to deviations from the linear regime.
 
 %\red{GK bias $\bigO(\eps) \rightarrow T = -\frac{1}{\lambda}\log(\eps)$}
 %
@@ -630,9 +630,10 @@ To bound the above quantity, one would like to directly apply \cref{prop:gen_sub
 	%
 	\begin{align}
 		\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt %&= \int_\mathcal{X}\left(\int_0^{+\infty} \bigl(\e^{t\L}R\bigr)(X_0^\eta) - \bigl(\e^{t\L}R\bigr)(Y_0^0) \, dt \right) \mucoup(dx \, dy) \\
-		&= \int_\mathcal{X}\int_0^{+\infty} \bigl(\e^{t\L}R\bigr)\circ \Phi_\eta \, dt \, d\mu
+		= \int_\mathcal{X}\int_0^{+\infty} \bigl(\e^{t\L}R\bigr)\circ \Phi_\eta \, dt \, d\mu
 %		&= \int_\mathcal{X}\int_0^{+\infty} \bigl(\e^{t\L}R\bigr)\circ \Phi_\eta \, d\mu \\
 		= \int_\mathcal{X} \bigl(-\L^{-1}R\bigr)\circ \Phi_\eta \, d\mu.
+		\label{eq:cor_Tint_to_LinvR}
 	\end{align}
 	%
 	Writing the expectation in terms of the semigroup, and in view of the operator identity \eqref{eq:op_identity}, we write the Green--Kubo formula~\eqref{eq:gk} as
@@ -644,7 +645,8 @@ To bound the above quantity, one would like to directly apply \cref{prop:gen_sub
 	Thus, by Proposition \ref{prop:gen_subtraction} with $f = -\L^{-1}R \in \S_0$, it follows that
 	%
 	\begin{equation}
-		\abs*{\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \eta\rho} \leq \eta^{\alpha+1} K_{-\L^{-1}R,\eta_*}.
+		\abs*{\frac{1}{\eta}\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \rho} \leq \eta^{\alpha} K_{-\L^{-1}R,\eta_*}.
+		\label{eq:cor_eta_bias}
 	\end{equation}
 	%
 	This allows us to obtain the desired result.
