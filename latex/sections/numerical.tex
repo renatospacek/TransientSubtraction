@@ -10,7 +10,7 @@ To illustrate the theoretical results obtained in \cref{sec:transient}, we apply
 \begin{itemize}
 	\item In \cref{subsec:num_lang}, we formulate the transient subtraction technique for Langevin dynamics by making precise $\varphi_1$ and $\varphi_2$ for the conjugate responses $S$ of interest.
 %	 \item In \cref{subsec:num_1D}, we illustrate the results from \cref{prop:gen_subtraction} with the one-dimensional Langevin dynamics. The aim is to numerically present \eqref{eq:prop_eta_bias_bound}, the scaling of the $\eta$ bias for first and second-order maps $\Phi_\eta^\alpha$. The low dimensionality of the system in consideration allows us to compute \eqref{eq:prop_eta_bias_bound} directly at the level of operators.
-	 \item In \cref{subsec:num_1D}, we numerically illustrate the finite $\eta$ bias results from \cref{cor:gk_equiv}, which apply \eqref{eq:prop_eta_bias_bound} to the subtraction estimator \eqref{eq:ts_estimator}. In particular, we demonstrate the bias scaling for first and second-order maps $\Phi_\eta^\alpha$. This is done with the one-dimensional Langevin dynamics, which allows to directly compute \eqref{eq:prop_eta_bias_bound}, at the level of operators, by discretizing the associated PDE. This enables a clear and effective presentation of the result, which would have otherwise been challenging to achieve with usual stochastic approaches. %\red{reread}
+	 \item In \cref{subsec:num_1D}, we numerically illustrate the finite $\eta$ bias results from \cref{cor:gk_equiv}, which apply~\eqref{eq:prop_eta_bias_bound} to the subtraction estimator \eqref{eq:ts_estimator}. In particular, we demonstrate the bias scaling for first and second-order maps $\Phi_\eta^\alpha$. This is done with the one-dimensional Langevin dynamics, which allows to directly compute \eqref{eq:prop_eta_bias_bound}, at the level of operators, by discretizing the associated PDE. This enables a clear and effective presentation of the result, which would have otherwise been challenging to achieve with usual stochastic approaches. %\red{reread}
 	 \item Finally, we compute in \cref{subsec:num_LJ} the mobility and shear viscosity for a Lennard--Jones fluid. This aim is to demonstrate the usefulness and viability of the method in more practical, high-dimensional molecular dynamics settings, particularly by highlighting its variance reduction capabilities.
 %
 %	 \item Finally, we compute in \cref{subsec:num_LJ} the mobility and shear viscosity for a Lennard--Jones fluid to show applications of the subtraction technique to more practical, high-dimensional molecular dynamics systems, demonstrating the usefulness and practicality of the method, and especially to highlight its variance-reduction capabilities.
@@ -27,16 +27,16 @@ To illustrate the theoretical results obtained in \cref{sec:transient}, we apply
 %\subsubsection{Physical context}
 %\label{subsubsec:physical_context}
 %
-Although our transient method only considers equilibrium dynamics, it encodes the relevant nonequilibrium information through the conjugate  response function $S$, which is the key quantity allowing to obtain the transport coefficient. This is expressed through the first-order perturbation PDE \eqref{eq:varphi1_PDE}, whose solution depends on $S$. To define it, let $F = F(q) \in \R^{dN}$ represent an external forcing, chosen appropriately based on the transport coefficient in consideration. \red{[maybe (gab's feedback before my rewrite of this part): say that at the level of NEMD/linear response, $F$ is a perturbation of \eqref{eq:lang_dynamics} and is added to the force $-\nabla V$; then say that one can show that $S$ is of the form below in this context.]} Particular choices for $F(q)$ are made precise for each scenario we consider in \cref{subsec:num_LJ}. For all such scenarios, the associated conjugate response function $S$ is given by
+Although our transient method only considers equilibrium dynamics, it encodes the relevant nonequilibrium information through the conjugate  response function $S$, which is the key quantity allowing to obtain the transport coefficient. This is expressed through the first-order perturbation PDE \eqref{eq:varphi1_PDE}, whose solution depends on $S$. To define it, let $F(q) \in \R^{d}$ represent an external forcing, chosen appropriately based on the transport coefficient in consideration. Particular choices for $F(q)$ are made precise for each scenario we consider in~\cref{subsec:num_LJ}. For all such scenarios, the associated conjugate response function $S$ is given by
 %
 \begin{equation}
-    S = \beta F^\t M^{-1} p.
+    S(q,p) = \beta F(q)^\t M^{-1} p.
     \label{eq:conj_res}
 \end{equation}
 %
 We remark that the formal definition of $S$ is based on the associated nonequilibrium dynamics, and relies on linear response theory to be rigorously derived. In the interest of clarity, we do not provide such a rigorous discussion, and instead refer the reader to \cite[Section 5.2.3]{acta_numerica2016} for a comprehensive discussion.
 
-Having identified the appropriate $S$, one can now construct the map $\Phi_\eta^\alpha$, for $\alpha=1,2$, by solving the associated PDEs~\eqref{eq:varphi1_PDE} and~\eqref{eq:varphi2_PDE}. 
+Having identified the appropriate conjugate response function~$S$, one can now construct the map $\Phi_\eta^\alpha$, for $\alpha=1,2$, by solving the associated PDEs~\eqref{eq:varphi1_PDE} and~\eqref{eq:varphi2_PDE}. 
 %It is often the case that the nongradient force $F(q,p)$ used to compute transport coefficients in NEMD is divergence-free. In particular, this holds for the examples we consider here, made precise in \eqref{subsec:num_mob_sv}, so we have that $S = \beta p^\t M^{-1} F(q)$.
 %
 %\begin{equation}
@@ -53,11 +53,11 @@ Having identified the appropriate $S$, one can now construct the map $\Phi_\eta^
 For Langevin dynamics, it is natural to consider the position and momentum components of $\varphi_1$ by writing $\varphi_1(q,p) = (\varphi_{1,q}(q,p), \varphi_{1,p}(q,p))$, so that we can write $\nabla^*\varphi_1 = \nabla^*_q\varphi_{1,q} + \nabla^*_p\varphi_{1,p}$. More precisely, the action of the adjoint operators are given by
 %
 \begin{equation}
-	\nabla^*_q = \beta\nabla V + \nabla_q, \qquad \nabla^*_p = \beta M^{-1}p + \nabla_p,
+	\partial^*_{q_i} = - \partial_{q_i} + \beta\partial_{q_i} V , \qquad \partial^*_{p_i} = - \partial_{p_i} + \beta \left[ M^{-1}p \right]_i,
 	\label{eq:nabla_star_expressions}
 \end{equation}
 %
-which can be obtained via integration by parts as in \eqref{eq:Astar_adjoint}. In view of \eqref{eq:nabla_star_expressions} and \eqref{eq:conj_res}, we can write \eqref{eq:varphi1_PDE} more explicitly for Langevin dynamics as
+which can be obtained via integration by parts as in \eqref{eq:Astar_adjoint}. In view of \eqref{eq:nabla_star_expressions} and \eqref{eq:conj_res}, we can write~\eqref{eq:varphi1_PDE} more explicitly for Langevin dynamics as
 %
 \begin{equation}
 	-\Div_q(\varphi_{1,q}) - \Div_p(\varphi_{1,p}) + \beta \nabla V^\t \varphi_{1,q} + \beta p^\t M^{-1} \varphi_{1,p} = \beta F(q)^\t M^{-1} p.
@@ -107,11 +107,11 @@ Substituting the solution \eqref{eq:varphi1_sol} for $\varphi_1$ in \eqref{eq:va
 Thus, as in the first-order case, one can choose $\varphi_{2,q} = 0$ so that $\varphi_2 = (0, \varphi_{2,p}(q,p))$. Next, recalling that $\nabla^*_p = \beta M^{-1}p - \nabla_p$,
 %
 \begin{align}
-    -\frac{1}{2}(\nabla_p^*)^2 \colon F\otimes F &= -\frac{1}{2}\sum_{i,j=1}^d \partial_{p_i}^*\partial_{p_j}^* \paren*{F_i(q)F_j(q)} \\
-    &= -\frac{\beta}{2}\sum_{i,j=1}^d \bkt*{-\partial_{p_i} + \beta (M^{-1}p)_i}(M^{-1}p)_j F_iF_j(q) \\
-    &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_iF_j(q) + \frac{\beta}{2} \sum_{i,j=1}^d \partial_{p_i}(M^{-1}p)_j F_iF_j \\
-    &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_iF_j(q) +\frac{\beta}{2}\sum_{i,j=1}^d [M^{-1}]_{ji} F_iF_j(q) \\
-    &= -\frac{1}{2}\paren*{\beta p^\t M^{-1}F(q)}^2 + \frac{1}{2}\beta F(q)^\t M^{-1}F(q).
+    -\frac{1}{2}(\nabla_p^*)^2 \colon F\otimes F &= -\frac{1}{2}\sum_{i,j=1}^d \partial_{p_i}^*\partial_{p_j}^* \paren*{F_i F_j} \\
+    &= -\frac{\beta}{2}\sum_{i,j=1}^d \bkt*{-\partial_{p_i} + \beta (M^{-1}p)_i}(M^{-1}p)_j F_i F_j \\
+    &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_i F_j + \frac{\beta}{2} \sum_{i,j=1}^d \partial_{p_i}(M^{-1}p)_j F_iF_j \\
+    &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_i F_j +\frac{\beta}{2}\sum_{i,j=1}^d [M^{-1}]_{ji} F_i F_j \\
+    &= -\frac{1}{2}\paren*{\beta p^\t M^{-1}F}^2 + \frac{1}{2}\beta F^\t M^{-1}F.
     %\equiv \nabla^*\varphi_2.
 \end{align}
 %
@@ -120,10 +120,10 @@ Thus, a possible solution for the second-order term $\varphi_2$ is
 \begin{equation}
     \varphi_2(q,p) = 
     \begin{pmatrix}
-        0 \\ -\dfrac{1}{2}F(q)\paren*{\beta F(q)^\t M^{-1} p}
+        0 \\ -\dfrac{\beta F(q)^\t M^{-1} p}{2}F(q)
     \end{pmatrix} = 
     \begin{pmatrix}
-        0 \\ -\dfrac{1}{2}F(q)S(q,p)
+        0 \\ -\dfrac{1}{2}S(q,p)F(q)
     \end{pmatrix}.
 \end{equation}
 %
@@ -195,10 +195,11 @@ Thus, we obtain
 We next present some numerical results showcasing the scaling of the finite $\eta$ bias for the first and second-order transformations $\Phi_\eta^\alpha$ derived in \cref{subsec:constructing_method}. As stated in \cref{cor:gk_equiv}, in particular~\eqref{eq:cor_eta_bias}, an estimator of order~$\alpha$ has bias~$\bigO(\eta^\alpha)$: 
 %
 \begin{equation}
+\label{eq:bias_1D_Langevin}
 	\abs*{\frac{1}{\eta}\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \rho} \leq K \eta^{\alpha}.
 \end{equation}
 %
-Note that we did not truncate the time-integral in the estimator above as the finite-time integration bias vanishes as $T\to+\infty$, allowing us to solely quantify the $\eta$ bias. By "reversing" the computation \eqref{eq:cor_Tint_to_LinvR}, we can write it as phase-space averages, \emph{i.e.}\ as stated in \cref{prop:gen_subtraction} (specifically~\eqref{eq:prop_eta_bias_bound}): 
+Note that we did not truncate the time-integral in the estimator above as the finite-time integration bias vanishes as $T\to+\infty$, allowing us to solely quantify the $\eta$ bias. In view of~\eqref{eq:cor_Tint_to_LinvR}, we can rewrite~\eqref{eq:bias_1D_Langevin} as
 %
 \begin{equation}
 %    \abs*{\int_\mathcal{X} [(-\L^{-1})R] \circ \Phi_\eta^\alpha \, d\mu - \int_\mathcal{X} (-\L^{-1})R \, d\mu - \eta\int_\mathcal{X} [(-\L^{-1})R] S \, d\mu} \leq K\eta^{\alpha+1}.
@@ -206,18 +207,17 @@ Note that we did not truncate the time-integral in the estimator above as the fi
     \label{eq:bias_1d-lang}
 \end{equation}
 %
-where the observable $R$ has average 0 with respect to $\mu$ (and hence so does $\L^{-1}R$). We write the bias in the form \eqref{eq:bias_1d-lang} since the low-dimensionality of the system in consideration allows us to directly compute the bias by discretizing $\L$ and solving the associated PDE. Were we to estimate it with standard stochastic approaches and time-averages with the usual estimator, it would be difficult to isolate the $\eta$ bias from the time-truncation bias in a reasonable fashion.
+where we used that~$\L^{-1}R$ has average~0 with respect to~$\mu$. We write the bias in the form \eqref{eq:bias_1d-lang} since the low-dimensionality of the system in consideration allows us to directly compute the bias by discretizing $\L$ and solving the associated PDE. %Were we to estimate it with standard stochastic approaches and time-averages with the usual estimator, it would be difficult to isolate the $\eta$ bias from the time-truncation bias in a reasonable fashion.
+Note that the bias result presented here holds for both the naive transient \eqref{eq:T_estimator} and subtraction \eqref{eq:ts_estimator} estimators.
 
-Note that since $R$ has average 0 with respect to $\mu$, the bias result presented here holds for both the naive transient \eqref{eq:T_estimator} and subtraction \eqref{eq:ts_estimator} estimators.
-
-\paragraph{Choice of observable.} We consider the following observable, which has average 0 with respect to $\mu$ by construction: 
+\paragraph{Choice of observable.} We consider the following observable, which has average 0 with respect to~$\mu$ by construction: 
 %
 \begin{equation}
 	R(q,p) = \paren*{\cos(q) - \sin(q)} \e^{\beta V(q)}.
 	\label{eq:R_observable}
 \end{equation}
 %
-This choice is also considered in order to avoid symmetries in the response function (which may occur for typical observables such as $p$ and $\nabla V$) so that the results are clearly presented; see \cite[Section 4.2]{synthetic2023}, for a more detailed discussion regarding the symmetries and the observable. Furthermore, the forcing $F$ in consideration is a normalized constant force, so that $F = 1$.
+This choice is also considered in order to avoid symmetries in the response function (which may occur for typical observables such as $p$ and $\nabla V$) so that the results are clearly presented; see \cite[Section~4.2]{synthetic2023}, for a more detailed discussion regarding the symmetries and the observable. Furthermore, the forcing $F$ in consideration is a normalized constant force, \emph{i.e.} $F = 1$.
 
 \paragraph{Numerically estimating the bias.} The low dimensionality of this example allows us to analytically compute \eqref{eq:bias_1d-lang} through a direct computation of $-\L^{-1}R$ via finite-difference methods, and the use of quadratures for the associated integrals over the phase-space; see \cite[Appendix B]{synthetic2023} for precise details on the numerical implementation of the finite-difference scheme. The unbounded momentum domain is truncated to $[-p_\mathrm{max},p_\mathrm{max}]$, with $p_\mathrm{max} = 5$. The domain $[-\pi,\pi] \times [-p_\mathrm{max},p_\mathrm{max}]$ is then discretized into $m_q = 200$ by $m_p = 400$ points with uniform step sizes $\Delta q = 2\pi/m_q$ and $\Delta p = 2p_\mathrm{max}/(m_p-1)$. 
 
@@ -232,7 +232,7 @@ We consider two maps $\Phi_\eta^\alpha$, for $\alpha=1,2$, constructed from $\va
 \end{cases}
 \end{equation}
 %
-The bias was computed for various values of $\eta$, and the results are shown in \cref{fig:1d_lang_bias} in a log-log scale, with reference lines included. This confirms that the bias associated with an $\alpha$-ordered map has error with $(\alpha+1)$-ordered leading terms \red{[divide plot by $\eta$]}, which the main estimate of \cref{prop:gen_subtraction}.
+The bias was computed for various values of $\eta$, and the results are shown in \cref{fig:1d_lang_bias} in a log-log scale, with reference lines included. This confirms that the bias associated with an $\alpha$-ordered map is itself of order $\alpha$, which is the main estimate of \cref{prop:gen_subtraction}.
 
 \begin{figure}[ht]
 	\centering
@@ -245,7 +245,7 @@ The bias was computed for various values of $\eta$, and the results are shown in
 \subsection{Mobility and shear viscosity for Lennard--Jones fluids}
 \label{subsec:num_LJ}
 %
-We next present some numerical results highlighting the variance-reduction potential of the transient subtraction method. The example in consideration is the computation of shear viscosity and mobility for a Lennard--Jones fluid. The system in consideration is composed of $N$ particles in spatial dimension $d=3$, evolving according to the underdamped Langevin dynamics \eqref{eq:lang_dynamics}. The potential energy corresponds to the sum of pairwise interactions
+We next present some numerical results highlighting the variance-reduction potential of the transient subtraction method. The example in consideration is the computation of shear viscosity and mobility for a Lennard--Jones fluid. The system in consideration is composed of $N$ particles in spatial dimension $D=3$ (so that~$d=DN$), evolving according to the underdamped Langevin dynamics \eqref{eq:lang_dynamics}. The potential energy corresponds to the sum of pairwise interactions
 %
 \begin{equation}
 	V(q) = \sum_{1\leq i<j\leq N} v(\norm{q_i - q_j}),
@@ -322,7 +322,7 @@ where the expression for $F(q)$ is made precise for mobility and shear viscosity
 When under the effect of a constant external field $F$, the mobility quantifies the particles' drift velocity in the direction of the applied field. In our Lennard--Jones fluid example, we consider a constant force applied in the $x$-direction, and in particular we consider colored drift, which amounts to perturbing half the particles to one direction, and the other half in the opposite direction:
 %
 \begin{equation}
-	F = \frac{1}{\sqrt{N}}(F_1,F_2,\dotsc,F_N)^\t \in \R^{dN}, \qquad F_i = ((-1)^{i+1}, 0, 0), \qquad i = 1,\dotsc,N.
+	F = \frac{1}{\sqrt{N}}(F_1,F_2,\dotsc,F_N)^\t \in \R^{3N}, \qquad F_i = ((-1)^{i+1}, 0, 0), \qquad i = 1,\dotsc,N.
 \end{equation}
 %
 The observable we consider is the velocity in the direction $F$, and is the standard choice for mobility computations \cite[Section 5.2.2]{acta_numerica2016}:

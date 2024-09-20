@@ -348,9 +348,9 @@ We refer for instance to \cite[Section 2]{acta_numerica2016} for a discussion on
 \subsubsection{Analysis of the bias}
 \label{subsubsec:bias_analysis}
 %
-There are several sources of bias arising from the estimator~\eqref{eq:ts_estimator}, such as the time truncation and time discretization bias when considering numerical schemes to integrate the dynamics. Quantifying such biases is standard practice for estimators of this form. Additionally, there is a bias arising from the finiteness of $\eta$, which is the main result of this section. This is made precise in \cref{prop:gen_subtraction} below, where we consider second-order corrections in $\eta$. \red{bothering me: its not the bias from just finite $\eta$ (i mean, it is but this is misleading). The more underlying fundamental reason is the coupling measure, which coincides up to 1st order (or 2nd). In fact, prop 1 is stated for a genera quantity employing the map, not just our observable (hence $f\circ \Phi$ for any $f$ and not just the expectation of some observable}
+There are several sources of bias arising from the estimator~\eqref{eq:ts_estimator}, such as the time truncation and time discretization bias when considering numerical schemes to integrate the dynamics. Quantifying such biases is standard practice for estimators of this form. Additionally, there is a bias arising from the finiteness of $\eta$, which is the main result of this section. This is made precise in \cref{cor:gk_equiv}, which builds upon the estimates on the coupling measures provided by~\cref{prop:gen_subtraction} below. 
 
-Before stating the result, we denote by $\mathcal{A}^*$ the adjoint of a closed operator $\mathcal{A}$ on $L^2(\mu)$: for any test functions~$\varphi, \phi \in C^\infty$ with compact support,
+To state the result, we denote by $\mathcal{A}^*$ the adjoint of a closed operator $\mathcal{A}$ on $L^2(\mu)$: for any test functions~$\varphi, \phi \in C^\infty$ with compact support,
 %
 \begin{equation}
     \int_\mathcal{X} (\mathcal{A}\varphi)\phi \, d\mu = \int_\mathcal{X} \varphi(\mathcal{A}^*\phi) \, d\mu.
@@ -607,7 +607,7 @@ This result, obtained as a direct consequence of Proposition \ref{prop:gen_subtr
 	\end{align}
 	%
 %	By Assumption \ref{as:decay_semigroup} and using that $\E_\mu(R)=0$, a similar argument to \cref{rem:composition_computation} gives
-To bound the above quantity, one would like to directly apply \cref{prop:gen_subtraction}. However, that would require controlling the time dependence of the prefactor $K_{\e^{t\L},\eta_*}$, which is not made explicit by \cref{prop:gen_subtraction}. We therefore apply the semigroup decay estimate \eqref{eq:decay} and \eqref{eq:lyap_composition_cor} to ensure a finite bound:
+To bound the above quantity, we apply the semigroup decay estimate~\eqref{eq:decay} and use~\eqref{eq:lyap_composition_cor}: 
 	%
 	\begin{align}
 		\abs*{\int_T^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt} &\leq \int_T^{+\infty} \int_\mathcal{X} \abs*{\bigl(\e^{t\L} R\bigr) \circ \Phi_\eta} \, d\mu \, dt \\
