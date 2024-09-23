@@ -87,6 +87,10 @@
 \newtheorem{example}{Example}[section]
 \newtheorem{case}{Case}
 \crefname{assumption}{Assumption}{Assumptions}
+\crefname{figure}{Figure}{Figures}
+
+\let\oldparagraph=\paragraph
+\renewcommand\paragraph[1]{\oldparagraph{#1.}}
 
 %%%%% Bibliography settings ========================================
 \usepackage[%
@@ -116,15 +120,15 @@
 \newcommand{\Binfz}{B_{n,0}^{\infty}}
 
 % Estimator macros
-\newcommand{\GKest}{\mathcal{\widehat{\rho}}^{T,M}_{\rm GK}}
+\newcommand{\GKest}{\mathcal{\widehat{\rho}}^{T,K}_{\rm GK}}
 \newcommand{\NEMDest}{\mathcal{\widehat{\rho}}^{T,\eta}_{\rm NEMD}}
 \newcommand{\estTmp}{\widehat{\rho}}
-\newcommand{\Test}{\estTmp^{T,M,\eta}_{\rm trans}} % transient
+\newcommand{\Test}{\estTmp^{T,K,\eta}_{\rm trans}} % transient
 \newcommand{\sTest}{\estTmp^{T,\eta}_{\rm trans}} % transient (K=1)
-\newcommand{\TSest}{\estTmp^{T,M,\eta}_{\rm sub}} % transient sub.
+\newcommand{\TSest}{\estTmp^{T,K,\eta}_{\rm sub}} % transient sub.
 \newcommand{\sTSest}{\estTmp^{T,\eta}_{\rm sub}} % transient sub. (K=1)
 \newcommand{\asTSest}{\estTmp^{T,\eta,\alpha}_{\rm sub}} % transient sub. (K=1, \alpha)
-\newcommand{\aTSest}{\estTmp^{T,M,\eta,\alpha}_{\rm sub}} % transient sub. (\alpha)
+\newcommand{\aTSest}{\estTmp^{T,K,\eta,\alpha}_{\rm sub}} % transient sub. (\alpha)
 
 
 

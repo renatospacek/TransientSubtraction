@@ -1,9 +1,5 @@
 \section{Application to Langevin dynamics}
-\label{sec:numerical}
-%
-%\red{- first point: showing that subtraction is good vs no subtraction, i.e. TS > T (2 etas for mobility)}
-%
-%\red{- second point: var unif bdd; plot of eta vs var (unif bdd), bias (FD)}
+\label{sec:numerical_lang}
 %
 To illustrate the theoretical results obtained in \cref{sec:transient}, we apply the transient subtraction technique to compute the mobility and shear viscosity for a Lennard--Jones fluid, and to a low-dimensional example, with the Langevin dynamics \eqref{eq:lang_dynamics} serving as the underlying dynamics for all cases. We present our numerical results in three parts:
 %
@@ -34,9 +30,9 @@ Although our transient method only considers equilibrium dynamics, it encodes th
     \label{eq:conj_res}
 \end{equation}
 %
-We remark that the formal definition of $S$ is based on the associated nonequilibrium dynamics, and relies on linear response theory to be rigorously derived. In the interest of clarity, we do not provide such a rigorous discussion, and instead refer the reader to \cite[Section 5.2.3]{acta_numerica2016} for a comprehensive discussion.
+We remark that the formal definition of $S$ is based on the associated nonequilibrium dynamics, and relies on linear response theory to be rigorously derived. In the interest of clarity, we do not provide such a rigorous discussion, and instead refer the reader to \cite[Section 5.2.3]{lelievre2016} for a comprehensive discussion.
 
-Having identified the appropriate conjugate response function~$S$, one can now construct the map $\Phi_\eta^\alpha$, for $\alpha=1,2$, by solving the associated PDEs~\eqref{eq:varphi1_PDE} and~\eqref{eq:varphi2_PDE}. 
+Having identified the appropriate conjugate response function~$S$, one can now construct the map~$\Phi_\eta^\alpha$, for~$\alpha=1,2$, by solving the associated PDEs~\eqref{eq:varphi1_PDE} and~\eqref{eq:varphi2_PDE}. 
 %It is often the case that the nongradient force $F(q,p)$ used to compute transport coefficients in NEMD is divergence-free. In particular, this holds for the examples we consider here, made precise in \eqref{subsec:num_mob_sv}, so we have that $S = \beta p^\t M^{-1} F(q)$.
 %
 %\begin{equation}
@@ -44,7 +40,7 @@ Having identified the appropriate conjugate response function~$S$, one can now c
 %\end{equation}
 %
 
-\paragraph{First-order map $\varphi_1$.} For convenience, let us first recall the expression for \eqref{eq:varphi1_PDE}: %\red{$d$ and $x$ vs $q,p$ for langevin below}
+\paragraph{First-order map $\varphi_1$} For convenience, let us first recall the expression for \eqref{eq:varphi1_PDE}: %\red{$d$ and $x$ vs $q,p$ for langevin below}
 %
 \begin{equation}
 	\nabla^*\varphi_1 = \sum_{i=1}^d \partial_{x_i}^* \varphi_{1,x_i} = S. %-\div(\varphi_1) + \beta\nabla U\varphi_1 = S
@@ -53,7 +49,7 @@ Having identified the appropriate conjugate response function~$S$, one can now c
 For Langevin dynamics, it is natural to consider the position and momentum components of $\varphi_1$ by writing $\varphi_1(q,p) = (\varphi_{1,q}(q,p), \varphi_{1,p}(q,p))$, so that we can write $\nabla^*\varphi_1 = \nabla^*_q\varphi_{1,q} + \nabla^*_p\varphi_{1,p}$. More precisely, the action of the adjoint operators are given by
 %
 \begin{equation}
-	\partial^*_{q_i} = - \partial_{q_i} + \beta\partial_{q_i} V , \qquad \partial^*_{p_i} = - \partial_{p_i} + \beta \left[ M^{-1}p \right]_i,
+	\partial^*_{q_i} = - \partial_{q_i} + \beta\partial_{q_i} V , \qquad \partial^*_{p_i} = - \partial_{p_i} + \beta (M^{-1}p)_i,
 	\label{eq:nabla_star_expressions}
 \end{equation}
 %
@@ -86,7 +82,7 @@ and the transformation $\Phi^1_\eta$ is then given by
 %
 Thus, constructing the initial conditions for a first-order transient trajectory simply amounts to shifting the initial momentum $p_0^0$ of some associated stationary equilibrium process by $\eta F(q_0^0)$.
 
-\paragraph{Second-order map $\varphi_2$.} Constructing the second-order map amounts to finding~$\varphi_2$ by solving~\eqref{eq:varphi2_PDE}, which we recall for convenience:
+\paragraph{Second-order map $\varphi_2$} Constructing the second-order map amounts to finding~$\varphi_2$ by solving~\eqref{eq:varphi2_PDE}, which we recall for convenience:
 %
 \begin{equation}
 	\nabla^*\varphi_2 = -\frac{1}{2}\sum_{i,j=1}^d \partial_{x_i}^*\partial_{x_j}^* (\varphi_{2,x_i}\varphi_{2,x_j}) = -\frac{1}{2}(\nabla^*)^2 \colon \varphi_1\otimes \varphi_1.
@@ -104,13 +100,13 @@ Substituting the solution \eqref{eq:varphi1_sol} for $\varphi_1$ in \eqref{eq:va
     \end{pmatrix} \equiv -\frac{1}{2}(\nabla_p^*)^2 \colon F\otimes F.
 \end{align}
 %
-Thus, as in the first-order case, one can choose $\varphi_{2,q} = 0$ so that $\varphi_2 = (0, \varphi_{2,p}(q,p))$. Next, recalling that $\nabla^*_p = \beta M^{-1}p - \nabla_p$,
+Thus, as in the first-order case, one can choose $\varphi_{2,q} = 0$ so that $\varphi_2 = (0, \varphi_{2,p}(q,p))$. Next, recalling that~$\partial^*_{p_i} = -\partial_{p_i} - \beta (M^{-1}p)_i$,
 %
 \begin{align}
     -\frac{1}{2}(\nabla_p^*)^2 \colon F\otimes F &= -\frac{1}{2}\sum_{i,j=1}^d \partial_{p_i}^*\partial_{p_j}^* \paren*{F_i F_j} \\
     &= -\frac{\beta}{2}\sum_{i,j=1}^d \bkt*{-\partial_{p_i} + \beta (M^{-1}p)_i}(M^{-1}p)_j F_i F_j \\
     &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_i F_j + \frac{\beta}{2} \sum_{i,j=1}^d \partial_{p_i}(M^{-1}p)_j F_iF_j \\
-    &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_i F_j +\frac{\beta}{2}\sum_{i,j=1}^d [M^{-1}]_{ji} F_i F_j \\
+    &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_i F_j +\frac{\beta}{2}\sum_{i,j=1}^d M^{-1}_{j,i} F_i F_j \\
     &= -\frac{1}{2}\paren*{\beta p^\t M^{-1}F}^2 + \frac{1}{2}\beta F^\t M^{-1}F.
     %\equiv \nabla^*\varphi_2.
 \end{align}
@@ -196,30 +192,30 @@ We next present some numerical results showcasing the scaling of the finite $\et
 %
 \begin{equation}
 \label{eq:bias_1D_Langevin}
-	\abs*{\frac{1}{\eta}\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \rho} \leq K \eta^{\alpha}.
+	\abs*{\frac{1}{\eta}\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \rho} \leq \mathcal{C}\eta^{\alpha}.
 \end{equation}
 %
 Note that we did not truncate the time-integral in the estimator above as the finite-time integration bias vanishes as $T\to+\infty$, allowing us to solely quantify the $\eta$ bias. In view of~\eqref{eq:cor_Tint_to_LinvR}, we can rewrite~\eqref{eq:bias_1D_Langevin} as
 %
 \begin{equation}
 %    \abs*{\int_\mathcal{X} [(-\L^{-1})R] \circ \Phi_\eta^\alpha \, d\mu - \int_\mathcal{X} (-\L^{-1})R \, d\mu - \eta\int_\mathcal{X} [(-\L^{-1})R] S \, d\mu} \leq K\eta^{\alpha+1}.
-    \abs*{\frac{1}{\eta}\int_\mathcal{X} (-\L^{-1}R) \circ \Phi_\eta^\alpha \, d\mu - \int_\mathcal{X} (-\L^{-1}R) S \, d\mu} \leq K\eta^{\alpha},
+    \abs*{\frac{1}{\eta}\int_\mathcal{X} (-\L^{-1}R) \circ \Phi_\eta^\alpha \, d\mu - \int_\mathcal{X} (-\L^{-1}R) S \, d\mu} \leq \mathcal{C}\eta^{\alpha},
     \label{eq:bias_1d-lang}
 \end{equation}
 %
 where we used that~$\L^{-1}R$ has average~0 with respect to~$\mu$. We write the bias in the form \eqref{eq:bias_1d-lang} since the low-dimensionality of the system in consideration allows us to directly compute the bias by discretizing $\L$ and solving the associated PDE. %Were we to estimate it with standard stochastic approaches and time-averages with the usual estimator, it would be difficult to isolate the $\eta$ bias from the time-truncation bias in a reasonable fashion.
 Note that the bias result presented here holds for both the naive transient \eqref{eq:T_estimator} and subtraction \eqref{eq:ts_estimator} estimators.
 
-\paragraph{Choice of observable.} We consider the following observable, which has average 0 with respect to~$\mu$ by construction: 
+\paragraph{Choice of observable} We consider the following observable, which has average 0 with respect to~$\mu$ by construction: 
 %
 \begin{equation}
 	R(q,p) = \paren*{\cos(q) - \sin(q)} \e^{\beta V(q)}.
 	\label{eq:R_observable}
 \end{equation}
 %
-This choice is also considered in order to avoid symmetries in the response function (which may occur for typical observables such as $p$ and $\nabla V$) so that the results are clearly presented; see \cite[Section~4.2]{synthetic2023}, for a more detailed discussion regarding the symmetries and the observable. Furthermore, the forcing $F$ in consideration is a normalized constant force, \emph{i.e.} $F = 1$.
+This choice is also considered in order to avoid symmetries in the response function (which may occur for typical observables such as $p$ and $\nabla V$) so that the results are clearly presented; see \cite[Section~4.2]{spacek2023}, for a more detailed discussion regarding the symmetries and the observable. Furthermore, the forcing $F$ in consideration is a normalized constant force, i.e.\ $F = 1$.
 
-\paragraph{Numerically estimating the bias.} The low dimensionality of this example allows us to analytically compute \eqref{eq:bias_1d-lang} through a direct computation of $-\L^{-1}R$ via finite-difference methods, and the use of quadratures for the associated integrals over the phase-space; see \cite[Appendix B]{synthetic2023} for precise details on the numerical implementation of the finite-difference scheme. The unbounded momentum domain is truncated to $[-p_\mathrm{max},p_\mathrm{max}]$, with $p_\mathrm{max} = 5$. The domain $[-\pi,\pi] \times [-p_\mathrm{max},p_\mathrm{max}]$ is then discretized into $m_q = 200$ by $m_p = 400$ points with uniform step sizes $\Delta q = 2\pi/m_q$ and $\Delta p = 2p_\mathrm{max}/(m_p-1)$. 
+\paragraph{Numerically estimating the bias} The low dimensionality of this example allows us to analytically compute \eqref{eq:bias_1d-lang} through a direct computation of $-\L^{-1}R$ via finite-difference methods, and the use of quadratures for the associated integrals over the phase-space; see \cite[Appendix B]{spacek2023} for precise details on the numerical implementation of the finite-difference scheme. The unbounded momentum domain is truncated to $[-p_\mathrm{max},p_\mathrm{max}]$, with $p_\mathrm{max} = 5$. The domain $[-\pi,\pi] \times [-p_\mathrm{max},p_\mathrm{max}]$ is then discretized into $m_q = 200$ by $m_p = 400$ points with uniform step sizes $\Delta q = 2\pi/m_q$ and $\Delta p = 2p_\mathrm{max}/(m_p-1)$. 
 
 We consider two maps $\Phi_\eta^\alpha$, for $\alpha=1,2$, constructed from $\varphi_1$ and $\varphi_2$ obtained in \cref{subsec:num_lang}, with particular forms
 %
@@ -258,7 +254,7 @@ with $v(r)$ given by the standard 12-6 Lennard--Jones interaction potential:
 	\label{eq:LJ_pairwise}
 \end{equation}
 %
-The parameter $\varepsilon$ represents the depth of the potential well, and $\sigma$ is the distance at which interactions are 0, \emph{i.e.} when interactions go from attractive to repulsive. In practice, one truncates the range of~\eqref{eq:LJ_pairwise} at some value $r_\mathrm{c}$, after which interactions can be deemed negligible. We employ the truncated shifted-force cutoff method with a cutoff value of $r_\mathrm{c}=2.5\sigma$, resulting in the modified potential
+The parameter $\varepsilon$ represents the depth of the potential well, and $\sigma$ is the distance at which interactions are 0, i.e.\ when interactions go from attractive to repulsive. In practice, one truncates the range of~\eqref{eq:LJ_pairwise} at some value $r_\mathrm{c}$, after which interactions can be deemed negligible. We employ the truncated shifted-force cutoff method with a cutoff value of $r_\mathrm{c}=2.5\sigma$, resulting in the modified potential
 %
 \begin{equation}
 	v_\mathrm{SF}(r) = [v(r) - v(r_\mathrm{c}) - (r - r_\mathrm{c})v'(r_\mathrm{c})]\ind_{r\leq r_\mathrm{c}}.
@@ -298,7 +294,7 @@ where the expression for $F(q)$ is made precise for mobility and shear viscosity
 %	Perturbation $\eta$ & $10^{-2}$ & $10^{-2}$ \\
     Integration time ($T$) & 3.5 & 2.0 \\
     Thermalization time ($T_\mathrm{therm}$) & 1 & 1 \\
-	No. of realizations ($M$) & $10^5$ & $10^5$ \\
+	No. of realizations ($K$) & $10^5$ & $10^5$ \\
 	Timestep ($\Delta t$) & $10^{-3}$ & $10^{-3}$ \\
 	Inverse temp. ($\beta$) & 1.25 & 0.8 \\
 	Damping ($\gamma$) & 1 & 1 \\
@@ -325,7 +321,7 @@ When under the effect of a constant external field $F$, the mobility quantifies 
 	F = \frac{1}{\sqrt{N}}(F_1,F_2,\dotsc,F_N)^\t \in \R^{3N}, \qquad F_i = ((-1)^{i+1}, 0, 0), \qquad i = 1,\dotsc,N.
 \end{equation}
 %
-The observable we consider is the velocity in the direction $F$, and is the standard choice for mobility computations \cite[Section 5.2.2]{acta_numerica2016}:
+The observable we consider is the velocity in the direction $F$, and is the standard choice for mobility computations \cite[Section 5.2.2]{lelievre2016}:
 %
 \begin{equation}
 	R(q,p) = F^\t M^{-1}p.
@@ -362,12 +358,12 @@ The observable we consider is the velocity in the direction $F$, and is the stan
 \cmidrule(lr){2-3}
  $\eta$ & \textbf{Naive} & \textbf{Subtraction} & \textbf{Ratio} \\
 \midrule
-%0.01 & 2660.7629 & 0.0047 & 566650.8213 \\
-%0.1  & 26.5611   & 0.0046 & 5712.2716  \\
-%1.0  & 0.2647    & 0.0044 & 60.5459    \\
-0.01 & $\sn{2.66}{3}$ & 0.0047 & $\sn{5.67}{5}$ \\
-0.1  & 26.56   & 0.0046 & $\sn{5.71}{3}$  \\
-1.0  & 0.265    & 0.0044 & 60.55    \\
+%0.01 & 2660.7629 & 0.00469 & 566650.8213 \\
+%0.1  & 26.5611   & 0.00465 & 5712.2716  \\
+%1.0  & 0.2647    & 0.00437 & 60.5459    \\
+0.01 & $\sn{2.66}{3}$ & $\sn{4.69}{-3}$ & $\sn{5.67}{5}$ \\
+0.1  & 26.6   & $\sn{4.65}{-3}$ & $\sn{5.71}{3}$  \\
+1.0  & 0.265    & $\sn{4.37}{-3}$ & 60.6    \\
 \bottomrule
 \end{tabular}
 \caption{Data at $T=1$ (start of decoupling)}
@@ -384,9 +380,9 @@ The observable we consider is the velocity in the direction $F$, and is the stan
 %0.01 & 5700.3092 & 11.7473 & 485.2457 \\
 %0.1  & 57.1811   & 5.5182  & 10.3622  \\
 %1.0  & 0.5644    & 0.2859  & 1.9740   \\
-0.01 & $\sn{5.70}{3}$ & 11.75 & $\sn{4.85}{2}$ \\
-0.1  & 57.18   & 5.518  & 10.36  \\
-1.0  & 0.564    & 0.286  & 1.974   \\
+0.01 & $\sn{5.70}{3}$ & 11.8 & 485 \\
+0.1  & 57.2   & 5.52  & 10.4  \\
+1.0  & 0.564    & 0.286  & 1.97   \\
 \bottomrule
 \end{tabular}
 \caption{Data at final time $T=2$ (total decoupling)}
@@ -402,13 +398,13 @@ To quantitatively assess the variance reduction and the decoupling effect, we co
 \subsubsection{Shear viscosity}
 \label{subsubsec:shear}
 %
-The shear viscosity of a fluid can be computed in a variety of ways; see \cite{todd_shear2007} for a review on computational techniques. In this work, we consider a setting based on the transverse force-field method \cite{joubaud2012} with a sinusoidal forcing profile. We denote by $F_i\in\R^d$ the force acting on the $i$th particle:
+The shear viscosity of a fluid can be computed in a variety of ways; see \cite{todd2007} for a review on computational techniques. In this work, we consider a setting based on the transverse force-field method \cite{joubaud2012} with a sinusoidal forcing profile. We denote by $F_i\in\R^3$ the force acting on the $i$th particle:
 %
 \begin{equation}
-    F_i = (f(q_y), 0, 0)^\t, \qquad  f(y) = \sin\paren*{\frac{2\pi y}{L_y}},
+    F_i = (f(q_y), 0, 0)^\t, \qquad  f(y) = \sin\paren*{\frac{2\pi y}{L_y}}.
 \end{equation}
 %
-The force acts on the $x$-component of the momenta based on the particles $y$-coordinate position.
+The force acts on the $x$-component of the momenta based on the particle's $y$-coordinate position.
 %
 %\begin{equation}
 %	\nu = \varrho\paren*{\frac{1}{2\rho} - \gamma_x}\paren*{\frac{L_y}{2\pi}}^2
@@ -416,10 +412,10 @@ The force acts on the $x$-component of the momenta based on the particles $y$-co
 %%
 %
 %
-The observable we consider is the first empirical Fourier coefficient:
+The observable $R$ of interest is the imaginary part of the first empirical Fourier coefficient $U_1$:
 %
 \begin{equation}
-    R(q,p) = \frac{1}{N}\sum_{n=1}^N [M^{-1}p]_{n,x}\exp\paren*{\frac{2\mathrm{i}\pi q_{n,y}}{L_y}}.
+    R(q,p) = \Im(U_1), \qquad U_1 = \frac{1}{N}\sum_{n=1}^N (M^{-1}p)_{n,x}\exp\paren*{\frac{2\mathrm{i}\pi q_{n,y}}{L_y}}.
     \label{eq:shear_observable}
 \end{equation}
 %
@@ -459,8 +455,8 @@ The initialization and evaluation of trajectories for this system were performed
 \midrule
 %0.01 & 7.32049 & 0.02604 & 281.07928 \\
 %0.1 & 0.07262 & 0.0054957 & 13.21505 \\
-0.01 & 7.32 & 0.026 & $\sn{2.81}{2}$ \\
-0.1 & 0.0726 & 0.00549 & 13.22 \\
+0.01 & 7.32 & 0.0260 & 281 \\
+0.1 & 0.0726 & $\sn{5.49}{-3}$ & 13.2 \\
 \bottomrule
 \end{tabular}
 \caption{Data at $T=2$ (start of decoupling)}
@@ -476,8 +472,8 @@ The initialization and evaluation of trajectories for this system were performed
 \midrule
 %0.01 & 14.9814 & 2.4468 & 6.1229 \\
 %0.1  & 0.1497  & 0.0487 & 3.0730 \\
-0.01 & 14.98 & 2.447 & 6.123 \\
-0.1  & 0.1497  & 0.0487 & 3.073 \\
+0.01 & 15.0 & 2.45 & 6.12 \\
+0.1  & 0.150  & 0.0487 & 3.07 \\
 \bottomrule
 \end{tabular}
 \caption{Data at final time $T=3.5$ (total decoupling)}

@@ -1,7 +1,7 @@
 \section{Transient subtraction method}
 \label{sec:transient}
 %
-We propose in this section a method called \emph{transient subtraction technique}, which employs a subtraction technique similar to the one suggested in \cite{ciccotti75} to the transient dynamics method discussed in Section \ref{subsec:transient} as a means for variance reduction. We first outline in Section \ref{subsec:constructing_method} the construction of the method, then present the numerical analysis of its associated estimators in Section \ref{subsec:num_anal_ts}.
+We propose in this section a method called \emph{transient subtraction technique}, which employs a subtraction technique similar to the one suggested in \cite{ciccotti1975} to the transient dynamics method discussed in Section \ref{subsec:transient} as a means for variance reduction. We first outline in Section \ref{subsec:constructing_method} the construction of the method, then present the numerical analysis of its associated estimators in Section \ref{subsec:num_anal_ts}.
 
 \subsection{Constructing the method}
 \label{subsec:constructing_method}
@@ -26,10 +26,10 @@ where $W_t$ and $\widetilde{W}_t$ are standard $m$-dimensional Brownian motions.
 	\label{eq:tc_subtraction}
 \end{equation}
 %
-Note that $\int_0^{+\infty} R(Y_t^0) \, dt$ acts as a control variate since $\E(R(Y_t^0))=0$ for all $t\geq 0$. The expression~\eqref{eq:tc_subtraction} admits the following natural estimator, carried out with independent initial conditions for the couple $(X_t^{\eta,m},Y_t^{0,m})_{t\geq 0}$ for $1\leq m\leq M$ and independent realizations of the dynamics~\eqref{eq:coupled_dynamics}:
+Note that $\int_0^{+\infty} R(Y_t^0) \, dt$ acts as a control variate since $\E(R(Y_t^0))=0$ for all $t\geq 0$. The expression~\eqref{eq:tc_subtraction} admits the following natural estimator, carried out with independent initial conditions for the couple $(X_t^{\eta,k},Y_t^{0,k})_{t\geq 0}$ for $1\leq k\leq K$ and independent realizations of the dynamics~\eqref{eq:coupled_dynamics}:
 %
 \begin{equation}
-    \TSest = \frac{1}{\eta M} \sum_{m=1}^M \int_0^T \bkt*{R(X_t^{\eta,m}) - R(Y_t^{0,m})} \, dt.
+    \TSest = \frac{1}{\eta K} \sum_{k=1}^K \int_0^T \bkt*{R(X_t^{\eta,k}) - R(Y_t^{0,k})} \, dt.
     \label{eq:ts_estimator}
 \end{equation}
 %
@@ -39,7 +39,7 @@ A sufficient condition for \eqref{eq:ts_estimator} to have smaller variance than
 
 \begin{enumerate}[label={(\Alph*)}]
 	\item \label{enum:init_dist} The initial distance $|X_0^\eta - Y_0^0|$ must be of order $\eta$;
-	\item \label{enum:stay_close} The dynamics must remain $\eta$ close for finite times as the copies of the system evolve, \emph{i.e.} $|X_t^\eta - Y_t^0|$ must be of order $\eta$ for $t\leq T$.
+	\item \label{enum:stay_close} The dynamics must remain $\eta$ close for finite times as the copies of the system evolve, i.e.\ $|X_t^\eta - Y_t^0|$ must be of order $\eta$ for $t\leq T$.
 \end{enumerate}
 %
 Condition \ref{enum:init_dist} amounts to finding a coupling measure which is concentrated along the diagonal in the~$(x,y)$ space, so that initial conditions are $\eta$ close. We emphasize that, although $\psip$ is by construction a $\bigO(\eta)$ perturbation of~$\mu$, this is not enough to guarantee that the trajectories start $\eta$ close when the initial conditions are independent, thus we require a coupling on the initial conditions.
@@ -69,7 +69,7 @@ This vector evolves according to a random ordinary differential equation, obtain
 \subsubsection{Synchronous coupling}
 \label{subsubsec:synchronous_coup}
 %
-A natural way to ensure that the dynamics remain close is via synchronous coupling, which amounts to using the same Brownian motion for both processes, \emph{i.e.} setting $\widetilde{W} = W$. It is known that synchronous coupling performs well in the presence of global dissipativity. Without it, however, trajectories decouple and we cannot control the coupling distance for long times. For the transient subtraction method, we do not require long-time results, as the relaxation time of the estimator~\eqref{eq:ts_estimator} is typically of order $\bigO(1/\lambda)$, with $\lambda$ the exponential convergence rate from \cref{as:decay_semigroup}. Thus, this suggests that synchronous coupling is an admissible control variate as long as the relaxation time is smaller than the decoupling time.
+A natural way to ensure that the dynamics remain close is via synchronous coupling, which amounts to using the same Brownian motion for both processes, i.e.\ setting $\widetilde{W} = W$. It is known that synchronous coupling performs well in the presence of global dissipativity. Without it, however, trajectories decouple and we cannot control the coupling distance for long times. For the transient subtraction method, we do not require long-time results, as the relaxation time of the estimator~\eqref{eq:ts_estimator} is typically of order $\bigO(1/\lambda)$, with $\lambda$ the exponential convergence rate from \cref{as:decay_semigroup}. Thus, this suggests that synchronous coupling is an admissible control variate as long as the relaxation time is smaller than the decoupling time.
 
 In order to more precisely state some results on the coupling distance, we give a sufficient condition for trajectories to decouple at most exponentially in time in \cref{as:contractivity}. % We assume the drift $b$ to be such that the following assumption holds.
  
@@ -170,7 +170,7 @@ We next state a standard result providing an upper bound for how fast trajectori
 \subsubsection{Properties of initial conditions}
 \label{subsubsec:properties_init_cond}
 %
-We consider a coupling measure $\mucoup(dx \, dy)$ with marginals $\psip(dx)$ and $\mu(dy)$. In order to ensure that the initial conditions are $\eta$ close, the coupling measure must be concentrated along the diagonal (more precisely, within $\eta$ distance from the diagonal), as illustrated in \cref{fig:coup_meas_mock}. A natural way of achieving this is to formulate~$X_0^\eta$ as a deterministic map of $Y_0^0$, \emph{i.e.}\ to look for $\Phi_\eta \colon \mathcal{X} \to \mathcal{X}$ such that~$X_0^\eta = \Phi_\eta(Y_0^0)$, with~$\Phi_\eta$ close to the identity function. The function~$\Phi_\eta$ should be chosen such that
+We consider a coupling measure $\mucoup(dx \, dy)$ with marginals $\psip(dx)$ and $\mu(dy)$. In order to ensure that the initial conditions are $\eta$ close, the coupling measure must be concentrated along the diagonal (more precisely, within $\eta$ distance from the diagonal), as illustrated in \cref{fig:coup_meas_mock}. A natural way of achieving this is to formulate~$X_0^\eta$ as a deterministic map of $Y_0^0$, i.e.\ to look for $\Phi_\eta \colon \mathcal{X} \to \mathcal{X}$ such that~$X_0^\eta = \Phi_\eta(Y_0^0)$, with~$\Phi_\eta$ close to the identity function. The function~$\Phi_\eta$ should be chosen such that
 %
 \begin{equation}
 	\psip = \Phi_\eta \# \mu = (1+\eta S)\mu + \bigO(\eta^2),
@@ -328,7 +328,7 @@ We also make an assumption on the convergence of the semigroup $\e^{t\L}$ in wei
 \end{assumption}
 %
 
-%See \cite[Section 2]{acta_numerica2016} for a discussion on sufficient conditions for the above to hold. 
+%See \cite[Section 2]{lelievre2016} for a discussion on sufficient conditions for the above to hold. 
 As a direct corollary of \cref{as:decay_semigroup}, the operator $\L$ is invertible on $\Binfz$, with
 %
 \begin{equation}
@@ -343,7 +343,7 @@ Moreover, the following bound holds
 	\label{eq:Linv_bound}
 \end{equation}
 %
-We refer for instance to \cite[Section 2]{acta_numerica2016} for a discussion on sufficient conditions for \cref{as:decay_semigroup} to hold (based on \cite{luc2006,mattingly2011}), and for the proof of \eqref{eq:op_identity}. 
+We refer for instance to \cite[Section 2]{lelievre2016} for a discussion on sufficient conditions for \cref{as:decay_semigroup} to hold (based on \cite{reybellet2006,hairer2011}), and for the proof of \eqref{eq:op_identity}. 
 
 \subsubsection{Analysis of the bias}
 \label{subsubsec:bias_analysis}
@@ -405,7 +405,7 @@ and
 Fix $\eta_*>0$, and $f\in \S$. Then, there exists $K_{f,\eta_*} \in\R_+$ (which depends on~$f$ and~$\eta_*$) such that, for any~$|\eta| \leq \eta_*$,
 %
 \begin{equation}
-	\qquad \left|\int_\mathcal{X} f\circ\Phi^\alpha_\eta \, d\mu - \int_\mathcal{X} f \, d\mu - \eta\int_\mathcal{X} f S \, d\mu\right| \leq \eta^{\alpha+1} K_{f,\eta_*},
+	\qquad \left|\int_\mathcal{X} f\circ\Phi^\alpha_\eta \, d\mu - \int_\mathcal{X} f \, d\mu - \eta\int_\mathcal{X} f S \, d\mu\right| \leq \eta^{\alpha+1} \mathcal{C}_{f,\eta_*},
 	\label{eq:prop_eta_bias_bound}
 \end{equation}
 %
@@ -437,8 +437,7 @@ Although \eqref{eq:varphi1_PDE} might look difficult to solve, one can show that
 \end{equation}
 %
 which has a unique solution when $\nabla^*\nabla$ has a spectral gap when considered as an operator on~$L^2(\mu)$ (implied by $\mu$ satisfying a Poincar\'e inequality).%, so that $(\nabla^*\nabla)^{-1}$ is well-defined on the space~$L^2_0(\mu)$).
-Note that the solutions $\varphi_1$ and $\varphi_2$ are defined up to an element of the kernel of $\nabla^*$, \emph{i.e.}\ if $\nabla\psi$ is a solution to~\eqref{eq:varphi1_PDE}, then~$\varphi_1 = \nabla\psi + g$ with $\nabla^*g = 0$ also an admissible solution. %Ideally, one would take take the minimum norm solution, or take a specific solution of gradient form.
-%Furthermore, the solutions $\varphi_1$ and $\varphi_2$ are defined up to an element of the kernel of $\nabla^*$. This gives us some freedom, as we can add a term which is divergence-free (with respect to $\mu$) to the solution, \emph{i.e.} have a solution of the form $\varphi_1 = \nabla\psi + g$ with $\nabla^*g = 0$. However, this also means that the solution could be arbitrarily large in norm. Ideally, one would take take the minimum norm solution, or take a specific solution of gradient form.
+Note that the solutions $\varphi_1$ and $\varphi_2$ are defined up to an element of the kernel of $\nabla^*$, i.e.\ if $\nabla\psi$ is a solution to~\eqref{eq:varphi1_PDE}, then~$\varphi_1 = \nabla\psi + g$ with $\nabla^*g = 0$ also an admissible solution. %Ideally, one would take take the minimum norm solution, or take a specific solution of gradient form.
 \end{remark}
 
 \begin{proof}[Proof of Proposition \ref{prop:gen_subtraction}]
@@ -556,7 +555,7 @@ The above result allows us to quantify the bias, as made precise in the corollar
 The generator $\L$ is invertible on $\S_0$. In other words, for any $\phi\in\S_0$, there exists a unique solution $\Psi \in \S_0$ to the Poisson equation $-\L\Psi = \phi$.
 \end{assumption}
 
-\cref{as:L_stability} can be shown to hold for overdamped and underdamped Langevin dynamics under certain conditions on the potential $V$ \cite{talay2002,kopec_ovd,kopec_lang}, and is a standard result in the literature.
+\cref{as:L_stability} can be shown to hold for overdamped and underdamped Langevin dynamics under certain conditions on the potential $V$ \cite{talay2002,kopec2014,kopec2015}, and is a standard result in the literature.
 
 Applying \cref{prop:gen_subtraction} together with the decay estimates from \cref{as:decay_semigroup}, as well as \cref{as:L_stability}, to the transient subtraction estimator \eqref{eq:ts_estimator} yields the following result on the bias of the estimator \eqref{eq:ts_estimator}.
 
@@ -645,7 +644,7 @@ To bound the above quantity, we apply the semigroup decay estimate~\eqref{eq:dec
 	Thus, by Proposition \ref{prop:gen_subtraction} with $f = -\L^{-1}R \in \S_0$, it follows that
 	%
 	\begin{equation}
-		\abs*{\frac{1}{\eta}\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \rho} \leq \eta^{\alpha} K_{-\L^{-1}R,\eta_*}.
+		\abs*{\frac{1}{\eta}\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \rho} \leq \eta^{\alpha} \mathcal{C}_{-\L^{-1}R,\eta_*}.
 		\label{eq:cor_eta_bias}
 	\end{equation}
 	%
@@ -661,14 +660,14 @@ We state in this section some results on the scaling of the variance of the esti
 	Suppose that \cref{as:contractivity} holds and that $R$ is globally Lipschitz with Lipschitz constant $\RLip$. Then, for any $T>0$,
 	%
 	\begin{equation}
-		\Var\paren*{\aTSest} \leq \frac{\RLip^2}{M}\frac{\E\bkt*{|X_0^\eta - Y_0^0|^2}}{\eta^2}\paren*{\int_0^T \e^{tB} \, dt}^2.
+		\Var\paren*{\aTSest} \leq \frac{\RLip^2}{K}\frac{\E\bkt*{|X_0^\eta - Y_0^0|^2}}{\eta^2}\paren*{\int_0^T \e^{tB} \, dt}^2.
 %		\Var(\TSest) \leq \frac{\E[|\delta_0^\eta|^2]\RLip^2}{KB^2}.\frac{\e^{2T\max(B,0)}}{K},
 	\label{eq:var_prop_bound}
 	\end{equation}
 	%
 \end{proposition}
 %
-This result suggests that the variance grows at most exponentially fast in time, which is the case when $B>0$. For dissipative drifts, \emph{i.e.} $B<0$, the variance is uniformly bounded in time by $B^{-2}$. Lastly, for $B=0$ the variance grows linearly in $T$.
+This result suggests that the variance grows at most exponentially fast in time, which is the case when $B>0$. For dissipative drifts, i.e.\ $B<0$, the variance is uniformly bounded in time by $B^{-2}$. Lastly, for $B=0$ the variance grows linearly in $T$.
 
 Note that the variance is uniformly bounded in $\eta$. In particular, since the functions $\varphi_1,\varphi_2$ (defined in \eqref{eq:varphi1_PDE} and \eqref{eq:varphi2_PDE}, respectively, and assumed to be in $B^\infty_n$ for some $n\in\N$) belong to~$L^2(\mu)$ by~\eqref{eq:lyap_L1}--\eqref{eq:lyap_prod}, it holds that
 %
@@ -697,11 +696,11 @@ For the result stated in \cref{prop:var_ts} , we do not consider the asymptotic 
 
 \begin{remark}[{\bf Comparison with transient method}]
 %	As we discussed in Section \ref{subsubsec:synchronous_coup}, 
-	Variance reduction is obtainable for synchronous coupling even without strong conditions on the drift of \eqref{eq:general_SDE}. In particular, when we have no dissipativity (\emph{i.e.} $B>0$), the subtraction technique is better than the usual transient method discussed in \cref{subsec:transient} provided that~$\e^{2BT} \ll T/\eta^2$, \emph{i.e.} $T\ll -\log(\eta)/B$. As one would typically consider $\eta\ll 1$, this suggests that the subtraction technique should therefore be preferred. 
+	Variance reduction is obtainable for synchronous coupling even without strong conditions on the drift of \eqref{eq:general_SDE}. In particular, when we have no dissipativity (i.e.\ $B>0$), the subtraction technique is better than the usual transient method discussed in \cref{subsec:transient} provided that~$\e^{2BT} \ll T/\eta^2$, i.e.\ $T\ll -\log(\eta)/B$. As one would typically consider $\eta\ll 1$, this suggests that the subtraction technique should therefore be preferred. 
 \end{remark}
 
 \begin{proof}[Proof of \cref{prop:var_ts}]
-It suffices to consider the estimator \eqref{eq:ts_estimator} for $M=1$, since $\Var(\aTSest) = M^{-1}\Var(\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub})$. To simplify the notation, we write $\asTSest$ instead of $\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub}$:
+It suffices to consider the estimator \eqref{eq:ts_estimator} for $K=1$, since $\Var(\aTSest) = K^{-1}\Var(\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub})$. To simplify the notation, we write $\asTSest$ instead of $\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub}$:
 	%
 	\begin{equation}
 		\asTSest = \frac{1}{\eta}\int_0^T (R(X_t^\eta) - R(Y_t^0)) \, dt.
@@ -725,70 +724,4 @@ It suffices to consider the estimator \eqref{eq:ts_estimator} for $M=1$, since $
 	\end{align}
 	%
 	which leads to the desired result.
-	\begin{comment}
-	To make precise the bounds above, we distinguish the between the cases $B\ne 0$ and $B=0$.
-	
-	\paragraph{Case $B\ne 0$.} Evaluating the integral in \eqref{eq:var_integral_bound} leads to
-	%
-	\begin{align}
-		\Var\paren*{\asTSest} \leq \E\bkt*{\frac{\RLip^2}{B^2}\frac{|X_0^\eta - Y_0^\eta|^2}{\eta^2}(\e^{TB}-1)^2},
-		%\leq \frac{\RLip^2}{B^2}\frac{\E\bkt*{|X_0^\eta - Y_0^0|^2}}{\eta^2}\e^{2T\max(B,0)},%\max\paren*{\e^{2TB},1}.
-%		&= C_1(\e^{2Bt} - 2\e^{Bt} + 1),
-		\label{eq:ts_var_int}
-	\end{align}
-	%
-	with the desired bound \eqref{eq:var_prop_bound} obtained by noting that $(\e^{TB}-1)^2$ is bounded by $\e^{2BT}$ for $B>0$, and by 1 for $B<0$.
-	
-	\paragraph{Case $B = 0$.} Similarly, evaluating the integral in \eqref{eq:var_integral_bound} yields the following bound
-	%
-	\begin{align}
-		\Var\paren*{\asTSest} \leq \E\bkt*{T^2\RLip^2\frac{|X_0^\eta - Y_0^\eta|^2}{\eta^2}}
-		%\leq \frac{\RLip^2}{B^2}\frac{\E\bkt*{|X_0^\eta - Y_0^0|^2}}{\eta^2}\e^{2T\max(B,0)}.
-	\end{align}
-	%
-	 Noting that $\lim_{B\to 0} (\e^{TB} - 1)^2/B^2 = T^2$, this case should be understood as the limit as $B\to 0$, leading to \eqref{eq:var_prop_bound}.	This concludes the proof.	
-%	 \end{comment}
-	\begin{comment}
-	Since $R$ is Lipschitz, we have
-	%
-	\begin{equation}
-		\abs*{\asTSest} \leq \RLip \int_0^T \frac{|X_t^\eta - Y_t^0|}{\eta} \, dt.
-	\end{equation}
-	%
-	For notational convenience, introduce 
-	%
-	\begin{equation}
-		\delta_t^\eta = \frac{|X_t^\eta - Y_t^0|}{\eta}.
-		\label{eq:delta_t_eta}
-	\end{equation} 
-	%
-	We can therefore bound the variance as
-	%
-	\begin{align}
-		\Var\paren*{\asTSest} &= \E\bkt*{\abs*{\asTSest - \E[\asTSest]^2}^2} \leq \E\bkt*{\abs*{\asTSest}^2}
-%		&\leq \E\bkt*{\paren*{\int_0^T\delta_t^\eta \, dt}^2}\RLip^2.
-		\leq \E\bkt*{\abs*{\int_0^T\delta_t^\eta \, dt}^2}\RLip^2.
-		\label{eq:var_gen_eq1}
-	\end{align}
-	%
-	Using \cref{lemma:decoupling_times}, we can bound $\delta_t^\eta$ in terms of the initial distance $\delta_0^\eta$ as $\delta_t^\eta \leq \e^{Bt}\delta_0^\eta$, 	so that
-	%
-	\begin{align}
-		\Var\paren*{\asTSest} &\leq \E\bkt*{\abs*{\int_0^T\e^{tB}\delta_0^\eta \, dt}^2}\RLip^2 \\
-		&= \E\bkt*{\frac{(\e^{TB}-1)^2|\delta_0^\eta|^2}{B^2}}\RLip^2 \leq \frac{\RLip^2\E\bkt*{|\delta_0^\eta|^2}}{B^2} \max\paren*{\e^{2TB},1}.
-%		&= C_1(\e^{2Bt} - 2\e^{Bt} + 1),
-		\label{eq:ts_var_int}
-	\end{align}
-	%
-	The last equality is obtained by noting that $(\e^{TB}-1)^2$ is bounded by $\e^{2BT}$ for $B>0$, and by 1 for $B<0$. This concludes the proof.
-	\end{comment}
-
-%	
-%	It remains to show \eqref{eq:delta0_var_statement}. Writing $X_0^\eta = \Phi_\eta^\alpha(Y_0^0)$, it follows that %When $\varphi_1,\varphi_2\in L^2(\mu)$, the expectation of the initial distance is of order 1, \emph{i.e.} there exist $C_1,C_2,C_3\in \R^+$ such that
-%	%
-%	\begin{align}
-%		\E\bkt*{|X_0^\eta - Y_0^0|^2} &= \E\bkt*{|\Phi_\eta^\alpha(Y_0^0) - Y_0^0|^2},
-%	\end{align}
-%	%
-%	which directly gives the result, since $\Phi_\eta^1(x) = x + \eta\varphi_1(x)$ and $\Phi_\eta^2(x) = x + \eta\varphi_1(x) + \eta^2\varphi_2(x)$. 
 \end{proof}
