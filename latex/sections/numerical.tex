@@ -241,7 +241,7 @@ The bias was computed for various values of $\eta$, and the results are shown in
 \subsection{Mobility and shear viscosity for Lennard--Jones fluids}
 \label{subsec:num_LJ}
 %
-We next present some numerical results highlighting the variance-reduction potential of the transient subtraction method. The example in consideration is the computation of shear viscosity and mobility for a Lennard--Jones fluid. The system in consideration is composed of $N$ particles in spatial dimension $D=3$ (so that~$d=DN$), evolving according to the underdamped Langevin dynamics \eqref{eq:lang_dynamics}. The potential energy corresponds to the sum of pairwise interactions
+We next present some numerical results highlighting the variance-reduction potential of the transient subtraction method. The example in consideration is the computation of shear viscosity and mobility for a Lennard--Jones fluid. The system is composed of $N$ particles in spatial dimension $D=3$ (so that~$d=DN$), evolving according to the underdamped Langevin dynamics \eqref{eq:lang_dynamics}. The potential energy corresponds to the sum of pairwise interactions
 %
 \begin{equation}
 	V(q) = \sum_{1\leq i<j\leq N} v(\norm{q_i - q_j}),
@@ -393,7 +393,7 @@ The observable we consider is the velocity in the direction $F$, and is the stan
 %
 Each trajectory is integrated for a physical time $T=2$. Although the system relaxes significantly before, we deliberately wanted to observe the decoupling point, which can be easily spotted in \cref{fig:LJ_mobility}, which shows the average trajectories for two values of $\eta$. Due to the large signal-to-noise ratio of the mobility response, the subtraction's uniform bound in $\eta$ of the variance indeed shows to make a difference, as can readily be seen from \cref{fig:LJ_mobility}. The associated error bars shown in \cref{fig:LJ_mobility} were computed with empirical averages over the independent realizations.
 
-To quantitatively assess the variance reduction and the decoupling effect, we consider the variance values for both the naive transient and subtraction methods at two different times $T$: one right before trajectories decouple $T=1$, and one at the final time $T=2$. These results are summarized in \cref{table:LJ_mobility}. At $T=1$, we indeed see the variance's uniform bound in $\eta$ for the subtraction trajectory, while the $\eta^{-2}$ factor shows for the naive trajectory. Additionally, we notice that at $T=2$, even after significant decoupling after decoupling, the subtraction method still provides significant variance reduction, even long after relaxation has occured.
+To quantitatively assess the variance reduction and the decoupling effect, we consider the variance values for both the naive transient and subtraction methods at two different times $T$: one right before trajectories decouple $T=1$, and one at the final time $T=2$. These results are summarized in \cref{table:LJ_mobility}. At $T=1$, we indeed see the variance's uniform bound in $\eta$ for the subtraction trajectory, while the $\eta^{-2}$ factor shows for the naive trajectory. Additionally, we notice that at $T=2$, even after significant decoupling, the subtraction method still provides significant variance reduction, even long after relaxation has occured.
 
 \subsubsection{Shear viscosity}
 \label{subsubsec:shear}
