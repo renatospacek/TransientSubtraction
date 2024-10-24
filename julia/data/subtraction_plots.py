@@ -276,3 +276,71 @@ ax1.legend([l1, l2, l3], ['0.01', '0.1', '1.0'],
 
 plt.subplots_adjust(right=0.85)
 plt.show()
+
+# %% ==========================================================================
+# ########## Mock illustration: coupling measure ##########
+#==============================================================================
+fig, ax = plt.subplots()
+plt.rcParams.update({
+    'font.size': 8,
+    'text.usetex': True,
+    'text.latex.preamble': r'\usepackage{amsfonts}'
+})
+ax.spines[["top", "right"]].set_visible(False)
+
+M = 10000;
+eta = 0.05;
+xLim = 1;
+x11 = np.linspace(0.0, xLim-eta, M)
+x22 = np.linspace(eta, xLim, M)
+
+x = np.linspace(0.0, xLim, M);
+xx = np.linspace(0.0, xLim, M);
+x2 = xLim - x;
+C1 = 0.1;
+C2 = 10;
+yy = x + C1/2*(np.cos(C2*x) + np.sin(C2*x));
+y1 = yy + eta;
+y2 = yy - eta;
+
+px1 = (xLim - eta)/2;
+px2 = (xLim + eta)/2;
+
+no = int(M/2);
+arl = 0.1;
+pt1 = (px1, px1 + eta);
+pt11 = (px1-arl, px1 + eta + arl);
+pt2 = (px2, px2 - eta);
+pt22 = (px2 + arl, px2 - eta - arl);
+
+
+ptt1 = (x[-1], y1[-1]);
+ptt10 = (ptt1[0], ptt1[1] + 0.15);
+ptt2 = (x[-1], y2[-1]);
+ptt20 = (ptt1[0], ptt2[1] - 0.15);
+
+mv = 0.4;
+
+etaoff = 0.02;
+pteta = (ptt1[0] + etaoff, xLim - 5*etaoff);
+
+ax.plot(x, y2, color = 'k')
+ax.plot(x, y1, color = 'k')
+
+ax.fill_between(x, y2, y1, fc="w", hatch="||")
+plt.tick_params(top=False, bottom=False, left=False, right=False,
+                labelleft=False, labelbottom=False)
+ax.set_xlim(0, xLim+0.2)
+ax.set_ylim(0, xLim+0.2)
+ax.annotate(r'$O(\eta)$', xy=pteta, xytext=pteta, fontsize = '20')
+
+ax.annotate('', xy=ptt1, xytext=ptt10, arrowprops=dict(arrowstyle='->'))#,rotation_mode='anchor',transform_rotates_text=True)
+ax.annotate('', xy=ptt2, xytext=ptt20, arrowprops=dict(arrowstyle='->'))#,rotation_mode='anchor',transform_rotates_text=True)
+
+ax.set_xlabel(r'$\mu$', fontsize = '16')
+ax.set_ylabel(r'$\widetilde{\mu}_\eta$', fontsize = '16')
+ax.plot(1, 0, ">k", transform=ax.get_yaxis_transform(), clip_on=False)  
+ax.plot(0, 1, "^k", transform=ax.get_xaxis_transform(), clip_on=False)
+
+plt.show()
+# fig.savefig('coup_meas_plot.eps', format='eps')
