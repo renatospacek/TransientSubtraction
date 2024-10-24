@@ -1,2 +1,4 @@
-latex/.texpadtmp/
+**/.texpadtmp/
+**/.DS_Store
+latex/JSP_submission/
 transient_plots.py
