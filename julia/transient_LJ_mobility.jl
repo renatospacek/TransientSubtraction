@@ -4,34 +4,35 @@ using LinearAlgebra
 using DelimitedFiles
 
 # ==============================================================================
-function main(η, M; yratio = 1.0, zratio = 1.0)
-    Nx = 10
-    t_sim = 3.0
+function mobility_main(η, M)
+    Npart = 10
+    t_sim = 2.0
     t_therm = 1.0
     dt = 1e-3
-    T = 0.8
-    ρ = 0.7
+    T = 1.25
+    ρ = 0.6
     γ = 1.0
     rc = 2.5
 
-    Lx = Nx/cbrt(ρ); Ly = Lx*yratio; Lz = Lx*zratio
+    L = Npart/cbrt(ρ)
     Nsteps = floor(Int64, t_sim/dt); Ntherm = floor(Int64, t_therm/dt)
-    Ny = round(Int64, Nx*yratio); Nz = round(Int64, Nx*zratio); N = Nx*Ny*Nz
+    N = Npart^3
     rseed = rand(1:1000000000, M)
 
-    sinus_forcing(y) = sin(2π*y/Ly)
-    ff = [zeros(Float64, 3) for n in 1:N]
-
-    boundary = CubicBoundary(Lx, Ly, Lz)
+    boundary = CubicBoundary(L, L, L)
     atoms = [Atom(index = i, ϵ = 1.0, σ = 1.0, mass = 1.0) for i = 1:N]
 
     # Initial conditions which will be thermalized
-    q0 = place_atoms_on_3D_lattice(Nx, Ny, Nz, boundary)
+    q0 = place_atoms_on_3D_lattice(Npart, L)
     p0 = [random_velocity(1.0, T, 1.0) for n = 1:N] # mass, T, k_B
 
     lj_w_cutoff = LennardJones(cutoff = ShiftedForceCutoff(rc), force_units = NoUnits, energy_units = NoUnits, use_neighbors = true)
     nf = CellListMapNeighborFinder(eligible = trues(N,N), unit_cell = boundary, n_steps = 10, dist_cutoff = 1.2*rc)
     simulator = LangevinSplitting(dt = dt, temperature = T, friction = γ, splitting="BAOAB",)
+
+    # Define color drift forcing
+    cd_forcing = [(-1.0)^i for i in 1:N]./sqrt(N)
+    ff = [[cd_forcing[i], 0.0, 0.0] for i in 1:N]
 
     # Definition and thermalizing run for equilibrium dynamics
     sys0 = System(
@@ -41,19 +42,17 @@ function main(η, M; yratio = 1.0, zratio = 1.0)
         boundary = boundary,
         pairwise_inters = (lj_w_cutoff,),
         neighbor_finder = nf,
+        loggers = (colordrift = GeneralObservableLogger(colordrift_response, Float64, 1),),
         force_units = NoUnits,
         energy_units = NoUnits,
-        k = 1.0
+        k = 1.0,
+        data = (forcing = cd_forcing,)
     )
 
-    simulate!(sys0, simulator, Ntherm)
+    simulate!(sys0, simulator, Ntherm; run_loggers=false)
 
     # Mapping for transient dynamics p^η = Φ_η = p^0 + ηF(q^0)
-    [ff[n][1] = sinus_forcing(sys0.coords[n][2]) for n in 1:N]      
     pη = sys0.velocities .+ η*ff
-
-    # Add loggers to equilibrium system
-    sys0 = System(sys0; loggers = (fourier = GeneralObservableLogger(fourier_response, Float64, 1),))
 
     # Define transient system
     sysη = System(
@@ -63,27 +62,27 @@ function main(η, M; yratio = 1.0, zratio = 1.0)
         boundary = boundary,
         pairwise_inters = (lj_w_cutoff,),
         neighbor_finder = nf,
-        loggers = (fourier = GeneralObservableLogger(fourier_response, Float64, 1),),
+        loggers = (colordrift = GeneralObservableLogger(colordrift_response, Float64, 1),),
         force_units = NoUnits,
         energy_units = NoUnits,
-        k = 1.0
+        k = 1.0,
+        data = (forcing = cd_forcing,)
     )
 
     # Write R1, R2 to file after each trajectory
-    open("R1_sv_test_$(η)_$(M).out", "w") do f1
-        open("R2_sv_test_$(η)_$(M).out", "w") do f2
+    open("R1_mobility_test_$(η)_$(M).out", "w") do f1
+        open("R2_mobility_test_$(η)_$(M).out", "w") do f2
             for i in 1:M
                 simulate!(sys0, simulator, Nsteps, rng=Random.seed!(rseed[i]))
                 simulate!(sysη, simulator, Nsteps, rng=Random.seed!(rseed[i]))
 
-                writedlm(f1, values(sys0.loggers.fourier)')
-                writedlm(f2, values(sysη.loggers.fourier)')
+                writedlm(f1, values(sys0.loggers.colordrift)')
+                writedlm(f2, values(sysη.loggers.colordrift)')
 
-                empty!(sys0.loggers.fourier.history)
-                empty!(sysη.loggers.fourier.history)
-                
+                empty!(sys0.loggers.colordrift.history)
+                empty!(sysη.loggers.colordrift.history)
+
                 # Update map Φ_η
-                [ff[n][1] = sinus_forcing(sys0.coords[n][2]) for n in 1:N]        
                 pη = sys0.velocities .+ η*ff
 
                 # Reset transient initial conditions for next trajectory
@@ -95,22 +94,17 @@ function main(η, M; yratio = 1.0, zratio = 1.0)
 end
 
 # ==============================================================================
-function fourier_response(s::System, args...; kwargs...)
+function colordrift_response(s::System, args...; kwargs...)
     p_x = view(reinterpret(reshape, Float64, s.velocities), 1, :)
-    q_y = view(reinterpret(reshape, Float64, s.coords), 2, :)
-    Ly = s.boundary.side_lengths[2]
-    N = length(s)
 
-    return imag(dot(p_x, exp.(2im*π*q_y/Ly))/N)
+    return dot(p_x, s.data.forcing)
 end
 
 # ==============================================================================
-function place_atoms_on_3D_lattice(Nx::Integer, Ny::Integer, Nz::Integer, boundary)
-    (Lx,Ly,Lz) = boundary.side_lengths
-
-    return reshape([SVector(i*Lx/Nx, j*Ly/Ny, k*Lz/Nz) for i = 0:Nx-1, j = 0:Ny-1, k = 0:Nz-1], Nx*Ny*Nz)
+function place_atoms_on_3D_lattice(N::Integer, L)
+    reshape([SVector(i*L/N, j*L/N, k*L/N) for i = 0:N-1, j = 0:N-1, k = 0:N-1], N^3)
 end
 
 # ==============================================================================
 # main(η, M)
-@time main(parse(Float64, ARGS[1]), parse(Int64, ARGS[2]))
+# @time main(parse(Float64, ARGS[1]), parse(Int64, ARGS[2]))

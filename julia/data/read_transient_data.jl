@@ -33,9 +33,9 @@ function read_data_mobility()
         R2tmp = readdlm("R2_mobility_test_$(ηv[i])_$M.out")
         dRtmp = R2tmp - R1tmp
 
-        cR1tmp = cumsum(R1tmp, dims=2)
-        cR2tmp = cumsum(R2tmp, dims=2)
-        cdRtmp = cumsum(dRtmp, dims=2)
+        cR1tmp = dt*cumsum(R1tmp, dims=2)/ηv[i]
+        cR2tmp = dt*cumsum(R2tmp, dims=2)/ηv[i]
+        cdRtmp = dt*cumsum(dRtmp, dims=2)/ηv[i]
 
         R1[i,:] = vec(mean(R1tmp, dims=1))
         R2[i,:] = vec(mean(R2tmp, dims=1))
@@ -86,13 +86,17 @@ function read_data_sv(yratio, zratio)
         R2tmp = readdlm("R2_sv_test_$(ηv[i])_$(M)_$(yratio)_$(zratio).out")
         dRtmp = R2tmp - R1tmp
 
-        cR1tmp = cumsum(R1tmp, dims=2)
-        cR2tmp = cumsum(R2tmp, dims=2)
-        cdRtmp = cumsum(dRtmp, dims=2)
+        cR1tmp = dt*cumsum(R1tmp, dims=2)/ηv[i]
+        cR2tmp = dt*cumsum(R2tmp, dims=2)/ηv[i]
+        cdRtmp = dt*cumsum(dRtmp, dims=2)/ηv[i]
 
         R1[i,:] = vec(mean(R1tmp, dims=1))
         R2[i,:] = vec(mean(R2tmp, dims=1))
         dR[i,:] = vec(mean(dRtmp, dims=1))
+
+        cR1[i,:] = vec(mean(cR1tmp, dims=1))
+        cR2[i,:] = vec(mean(cR2tmp, dims=1))
+        cdR[i,:] = vec(mean(cdRtmp, dims=1))
 
         v1[i,:] = vec(var(R1tmp, dims=1))
         v2[i,:] = vec(var(R2tmp, dims=1))
