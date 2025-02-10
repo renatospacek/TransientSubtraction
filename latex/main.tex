@@ -31,6 +31,7 @@
 \newcommand{\email}[1]{\href{mailto:#1}{#1}}
 \emergencystretch=1em
 \renewcommand{\arraystretch}{1.1}
+%\usepackage{refcheck}
 
 %%%%% Command definitions ======================================
 \newcommand{\T}{\mathbb{T}}
@@ -199,8 +200,9 @@ Consider a general time-homogeneous SDE with additive noise defined on the state
 \end{equation}
 where $b\colon \mathcal{X} \to \R^d$ is a smooth function, $\sigma \in \R^{d\times m}$ is a constant matrix and $W_t$ is a standard~$m$-dimensional Brownian motion. We assume that~\eqref{eq:general_SDE} admits a unique strong solution (which is the case for instance when $b$ is globally Lipschitz). We restrict ourselves to cases where $\sigma$ is constant, as the dynamics of interest considered later on, namely Langevin dynamics, only involve additive noise, and also because the coupling method we introduce in \cref{subsec:constructing_method} is considerably easier to formulate in this setting. The dynamics \eqref{eq:general_SDE} has associated infinitesimal generator
 \begin{equation}
+    \notag
     \L = b^\t\nabla + \frac{1}{2}\sigma\sigma^\t \colon \nabla^2 = \sum_{i=1}^d b_i\partial_{x_i} + \frac{1}{2}\sum_{i,j=1}^d\sum_{k=1}^m \sigma_{ik}\sigma_{jk} \partial_{x_ix_j}^2,
-    \label{eq:general_generator}
+%    \label{eq:general_generator}
 \end{equation}
 where $\colon$ denotes the Frobenius inner product. Throughout this work, we assume that~\eqref{eq:general_SDE} admits a unique invariant probability measure $\mu$ with a positive density with respect to the Lebesgue measure. 
 We denote by 
@@ -267,15 +269,18 @@ To motivate the equality \eqref{eq:transient_def}, we consider finite $\eta\ll 1
 \begin{align}
     \label{eq:gk_equiv1}
 	\frac{1}{\eta}\int_0^{+\infty} \E(R(X_t^\eta)) \, dt &= \frac{1}{\eta} \int_0^{+\infty} \int_\mathcal{X} \bigl(\e^{t\L} R\bigr) \, d\psip \, dt \\
+	\notag
 	&= \frac{1}{\eta}\int_0^{+\infty} \int_\mathcal{X} \e^{t\L} R \, d\mu \, dt + \int_0^{+\infty} \int_\mathcal{X} \bigl(\e^{t\L} R\bigr) S \, d\mu \, dt + \bigO(\eta) \\
+	\notag
 	&= \int_0^{+\infty} \int_\mathcal{X} \bigl(\e^{t\L} R\bigr) S \, d\mu \, dt + \bigO(\eta) \\
 	&= \int_0^{+\infty} \E_\mu\bigl(R(X_t)S(X_0)\bigr) dt + \bigO(\eta).
     \label{eq:gk_equiv2}
 \end{align}
 It is clear that by letting $\eta\to 0$ we get the correct result, i.e., \eqref{eq:transient_def} is equivalent to the Green--Kubo formula \eqref{eq:gk}:
 \begin{equation}
+    \notag
 	\lim_{\eta\to 0}\frac{1}{\eta}\int_0^{+\infty} \E(R(X_t^\eta)) \, dt = \int_0^{+\infty} \E_\mu(R(X_t) S(X_0)) \, dt.
-	\label{eq:td_gk}
+%	\label{eq:td_gk}
 \end{equation}
 We recall that $\E_\mu$ denotes the expectation with respect to the reference dynamics started at equilibrium, while $\E$ on the left-hand side denotes the expectation with respect to the reference dynamics initialized as $X_0^\eta \sim \psip$.
 
@@ -290,8 +295,9 @@ Although these approximations lead to several sources of bias in \eqref{eq:T_est
 
 \paragraph{Asymptotic variance of usual transient estimator} The asymptotic variance of the estimator~\eqref{eq:T_estimator} is
 \begin{equation}
+    \notag
 	\lim_{T\to+\infty} T^{-1}\Var\bigl(\Test\bigr) = \frac{2}{K\eta^2}\int_\mathcal{X} R\paren*{-\L^{-1} R} \, d\mu.
-	\label{eq:asym_var_transient}
+%	\label{eq:asym_var_transient}
 \end{equation}
 It corresponds to the usual asymptotic variance for time averages of ergodic equilibrium dynamics, except for the very large prefactor $1/\eta^2$. 
 
@@ -400,12 +406,14 @@ Condition \ref{enum:init_dist} amounts to finding a coupling measure which is co
 \begin{remark}[{\bf Tangent dynamics}]
 The expression \eqref{eq:tc_subtraction} of the transport coefficient can be formulated in terms of tangent dynamics \cite{assaraf2017}. Denote by $\mathcal{T}_t\in\R^d$ the tangent vector, where
 \begin{equation}
+\notag
 	\mathcal{T}_t 
 = \lim_{\eta\to 0} \frac{X_t^\eta - X_t^0}{\eta}.
 \end{equation} 
 This vector evolves according to a random ordinary differential equation, obtained by linearizing \eqref{eq:general_SDE}. Moreover,
 \eqref{eq:tc_subtraction} can be written as
 \begin{equation}
+\notag
 	\rho = \lim_{\eta\to 0} \frac{1}{\eta}\int_0^{+\infty} \E\paren*{R(X_t^\eta) - R(Y_t^0)} \, dt = \int_0^{+\infty} \E\paren*{\mathcal{T}_t\cdot \nabla R(X_t^0)} \, dt.
 \end{equation}
 \end{remark}
@@ -431,18 +439,19 @@ A sufficient condition for \eqref{eq:no_dissip} to be satisfied is when the drif
 	\label{lemma:decoupling_times}
 	Suppose that \Cref{as:contractivity} holds. Then, almost surely,
 \begin{equation}
+\notag
 \forall t\geq 0, \qquad |X_t^\eta - Y_t^0| \leq \e^{tB}|X_0^\eta - Y_0^0|.
-	\label{eq:gronwall_decouple}
+%	\label{eq:gronwall_decouple}
 	\end{equation}
 \end{lemma}
 
 \begin{proof}In order to bound the distance between the trajectories at time $t$ in terms of the initial distance, we first write, by It\^o's formula,
-\begin{align}
+\begin{align*}
 		d\bigl(|X_t^\eta - Y_t^0|^2\bigr) &= 2\ip{X_t^\eta - Y_t^0, dX_t^\eta - dY^0_t} \\
 		&= 2\langle X_t^\eta - Y_t^0, b(X_t^\eta) - b(Y_t^0)\rangle \, dt \\
 		&\leq 2B|X_0^\eta - Y_0^0|^2 \, dt.
-		\label{eq:ito_dissip}
-	\end{align}
+%		\label{eq:ito_dissip}
+	\end{align*}
 Gr\"onwall's lemma then gives the claimed bound. \end{proof}
 
 \subsubsection{Properties of initial conditions}
@@ -454,6 +463,7 @@ We consider a coupling measure $\mucoup(dx \, dy)$ with marginals $\psip(dx)$ an
 \end{equation}
 where $\#$ denotes the image measure of $\mu$ by $\Phi_\eta$: For any bounded measurable test function~$\varphi\colon \X \to \R$,
 \begin{equation}
+    \notag
 	\int_\mathcal{X} \varphi \, d\psip = \int_\mathcal{X} \varphi \circ \Phi_\eta \, d\mu.
 \end{equation}
 We look for a map $\Phi_\eta$ of the form
@@ -490,14 +500,17 @@ In this section, we perform error analysis on the transient subtraction estimato
 \label{subsubsec:lyapunov_setting}
 Consider a family of Lyapunov functions $(\mathcal{K}_n)_{n\in\N}$ with $\mathcal{K}_n \colon \mathcal{X} \to [1,+\infty)$ such that
 \begin{equation}
+\notag
 	\forall n\in\N, \qquad \mathcal{K}_n \leq \mathcal{K}_{n+1}.
 \end{equation}
 The associated weighted $B^\infty$ spaces are
 \begin{equation}
+\notag
     B_n^\infty = \left\{\varphi \, \rm{measurable} \; \middle| \; \|\varphi\|_{B_n^\infty} := \sup _{x \in \mathcal{X}}\left| \frac{\varphi(x)}{\mathcal{K}_n(x)} \right| < +\infty\right\}.
 \end{equation}
 We next introduce the space $\S$ of smooth functions $\varphi$ belonging to the space $B^\infty_n$ for some $n$, and whose derivatives also belong to such spaces:
 \begin{equation}
+\notag
     \S = \left\{\varphi \in C^\infty(\mathcal{X}) \; \middle| \; \forall k \in \mathbb{N}^d, \; \exists n \in \mathbb{N}, \; \partial^k \varphi \in B_n^\infty\right\}.
 \end{equation}
 We finally define the subspace $\S_0$ of functions in $\S$ with average 0 with respect to $\mu$.
@@ -523,6 +536,7 @@ Moreover, we assume that the Lyapunov functions are stable by products: for any~
 \end{equation}
 We also assume stability by compositions: for any~$n,n'\in\N$ and~$\alpha^*\in\R^+$, there exist~$m\in\N$ and~$C_{n,n',\alpha^*}\in\R^+$ such that
 \begin{equation}
+\notag
 	\forall\alpha \in [0,\alpha^*], \qquad \mathcal{K}_n(\alpha\mathcal{K}_{n'}(x)) \leq C_{n,n',\alpha^*}\mathcal{K}_m(x).
 	\label{eq:lyap_comp}
 \end{equation}
@@ -534,7 +548,9 @@ Lastly, we assume that $\mathcal{K}_n$ is nondecreasing in the following sense:
 
 A useful corollary of \cref{as:lyapunov}, which we will use in our estimates, is the following: for any~$f\in B^\infty_{n}$ and~$g = (g_1,\dotsc,g_d)$ with $g_i \in B^\infty_{n'}$, 
 \begin{align}
+\notag
 	|f\circ g|(x) &\leq \|f\|_{B_{n}^\infty}\mathcal{K}_{n} \circ g(x) \\
+	\notag
     &\leq \|f\|_{B_{n}^\infty}\mathcal{K}_{n}\paren*{\|g\|_{B^\infty_{n'}} \mathcal{K}_{n'}(x)} \\
     &\leq \norm{f}_{B^\infty_n}K_{n,n',\|g\|_{B^\infty_{n'}}}\mathcal{K}_{m}(x),
 	\label{eq:lyap_composition_cor}
@@ -545,6 +561,7 @@ A typical choice for $\mathcal{K}_n$ are polynomial Lyapunov functions of the fo
 
 We also make an assumption on the convergence of the semigroup $\e^{t\L}$ in weighted~$B^\infty$ spaces. To this end, we introduce the subspace $B^\infty_n$ of functions with average~0 with respect to $\mu$:
 \begin{equation}
+\notag
     \Binfz = \left\{\varphi \in B^\infty_n \; \middle| \; \int_\mathcal{X} \varphi \, d\mu = 0\right\}.
 \end{equation}
 
@@ -564,8 +581,9 @@ As a direct corollary of \cref{as:decay_semigroup}, the operator $\L$ is inverti
 \end{equation}
 Moreover, the following bound holds
 \begin{equation}
+\notag
   \norm{\L^{-1}}_{B^\infty_n} \leq \frac{L_n}{\lambda_n}.
-  \label{eq:Linv_bound}
+%  \label{eq:Linv_bound}
 \end{equation}
 We refer for instance to \cite[Section 2]{lelievre2016} for a discussion on sufficient conditions for \cref{as:decay_semigroup} to hold (based on \cite{reybellet2006,hairer2011}), and for the proof of \eqref{eq:op_identity}.
 
@@ -620,18 +638,21 @@ This result states that the finite $\eta$ bias in the linear response is of orde
 \begin{remark}[{\bf Well-posedness of PDEs}]
 Although \eqref{eq:varphi1_PDE} might look difficult to solve, one can show that it admits gradient solutions of the form $\varphi_1 = \nabla\psi$ under some conditions on $\mu$. Indeed, \eqref{eq:varphi1_PDE} can then be written as
 \begin{equation}
-	\nabla^*\nabla \psi = S, \end{equation}
+\notag
+	\nabla^*\nabla \psi = S, 
+	\end{equation}
 which has a unique solution when $\nabla^*\nabla$ has a spectral gap when considered as an operator on~$L^2(\mu)$ (implied by $\mu$ satisfying a Poincar\'e inequality). Note that the solutions~$\varphi_1$ and~$\varphi_2$ are defined up to an element of the kernel of $\nabla^*$, i.e., if $\nabla\psi$ is a solution to~\eqref{eq:varphi1_PDE}, then~$\varphi_1 = \nabla\psi + g$ with $\nabla^*g = 0$ is also an admissible solution. \end{remark}
 
 \begin{proof}[Proof of \cref{prop:gen_subtraction}]
 It suffices to prove the result for $\alpha=2$, from which the result for $\alpha=1$ can be trivially deduced. By a Taylor expansion of $f(\Phi_\eta(x))$,
-\begin{align}
+\begin{align*}
 		f(\Phi_\eta(x)) = f(x) &+ \eta \nabla f(x)^\t(\varphi_1(x) + \eta\varphi_2(x)) \\
 		&+ \frac{\eta^2}{2}(\varphi_1(x) + \eta\varphi_2(x))^\t \nabla^2 f(x)(\varphi_1(x) + \eta\varphi_2(x)) \\
 		&+ \frac{\eta^3}{6} \nabla^3f\left(\Theta_\eta(x)\right)\cdot (\varphi_1(x) + \eta\varphi_2(x))^{\otimes 3},
-\end{align}
+\end{align*}
 where $\nabla^3 f$ denotes the third-order derivative tensor (and $\nabla^2 f$ denotes the Hessian), and~$\Theta_\eta(x)$ interpolates between~$x$ and~$\Phi_\eta(x)$:
 \begin{equation}
+\notag
 	\Theta_\eta(x) = (1-\theta_\eta(x))x + \theta_\eta(x)\Phi_\eta(x), \qquad \theta_\eta(x) \in [0,1].
 \end{equation}
 Integrating the Taylor expansion above yields
@@ -642,17 +663,20 @@ Integrating the Taylor expansion above yields
  &\qquad + \eta^2\int_\mathcal{X} \paren*{\varphi_2^\t \nabla f+\frac{1}{2}\varphi_1^\t(\nabla^2 f)\varphi_1} \, d\mu + \eta^3\mathcal{R}_{3,\eta},
  \end{split}
 \end{equation}
-with $\mathcal{R}_{3,\eta}$ given by \begin{equation}
+with $\mathcal{R}_{3,\eta}$ given by 
+\begin{equation}
 \mathcal{R}_{3,\eta} = \int_\mathcal{X} \bkt*{\frac{1}{6}\nabla^3f\left(\Theta_\eta\right)\cdot (\varphi_1 + \eta\varphi_2)^{\otimes 3} + \varphi_1^\t (\nabla^2 f)\varphi_2 + \frac{\eta}{2}\varphi_2^\t (\nabla^2 f)\varphi_2} \, d\mu.
 	\label{eq:R3eta_bias}
 \end{equation}
 We next show that the remainder term $\mathcal{R}_{3,\eta}$ is uniformly bounded. We start with the first right-hand side integrand term in \eqref{eq:R3eta_bias}. Since $\varphi_1,\varphi_2$ have components in $B^\infty_n$ for some $n\in\N$, we deduce that so does $\Phi_\eta\in B^\infty_n$ (since the identity is in $B^\infty_n$ upon possibly increasing $n$ in view of \eqref{eq:lyap_identity}), and thus also~$\Theta_\eta$. Therefore, since $f\in\S$ and in view of \eqref{eq:lyap_comp} and \eqref{eq:lyap_composition_cor}, there exist $m,n'\in\N$ and $C\in\R^+$ such that, for all~$x\in\mathcal{X}$ and all $\eta\in [-\eta_*,\eta_*]$,
 \begin{align}
+\notag
 	\abs*{\nabla^3f\paren*{\Theta_\eta(x)}} \leq C\smash{\sum_{i,j,k=1}^d}\norm*{\partial_{x_i,x_j,x_k}^3 f}_{B_m^\infty}\mathcal{K}_{n'}(x),
 \end{align}
 so that 
 \begin{align}
-	&\left|\int_\mathcal{X} \nabla^3f\paren*{\Theta_\eta(x)}\cdot (\varphi_1(x) + \eta\varphi_2(x))^{\otimes 3} \, d\mu\right| \label{eq:R3theta_err} \\
+\notag
+	&\left|\int_\mathcal{X} \nabla^3f\paren*{\Theta_\eta(x)}\cdot (\varphi_1(x) + \eta\varphi_2(x))^{\otimes 3} \, d\mu\right| \\%\label{eq:R3theta_err} \\
 	\label{eq:rem_bounded}
 &\qquad \leq C\smash{\sum_{i,j,k=1}^d}\norm*{\partial_{x_i,x_j,x_k}^3 f}_{B_m^\infty}\paren*{\norm{\varphi_1}_{B_n^\infty} + \eta\norm{\varphi_2}_{B_n^\infty}}^3\int_\mathcal{X} \mathcal{K}_n^3\mathcal{K}_{n'} \, d\mu,
 \end{align}
@@ -660,12 +684,14 @@ where \eqref{eq:lyap_comp} ensures uniformity in $\eta$ for the bounds above. By
 
 To prove~\eqref{eq:prop_eta_bias_bound}, it remains to show that the first and second-order terms in~$\eta$ in~\eqref{eq:prop_eta_bias_bound} and~\eqref{eq:prop_rhs_terms} coincide, which is by design of~$\varphi_1$ and~$\varphi_2$. Indeed, by taking $L^2(\mu)$-adjoints and in view of condition~\eqref{eq:varphi1_PDE} on~$\varphi_1$,
 \begin{equation}
+\notag
 	\int_\mathcal{X} \nabla f^\t \varphi_1 \, d\mu = \int_\mathcal{X} f\nabla^* \varphi_1 \, d\mu = \int_\mathcal{X} f S \, d\mu.
 \end{equation}
 Similarly, applying $L^2(\mu)$-adjoints to the second-order $\eta$ terms in \eqref{eq:prop_rhs_terms} yields
 \begin{align}
+\notag
 	\int_\mathcal{X} \paren*{\varphi_2^\t \nabla f + \frac{1}{2}\varphi_1^\t (\nabla^2f) \varphi_1} \, d\mu = \int_\mathcal{X} \paren*{\nabla^*\varphi_2 + \frac{1}{2}(\nabla^*)^2 \colon \varphi_1\otimes \varphi_1}f \, d\mu,
-	\label{eq:eta2_term}
+%	\label{eq:eta2_term}
 \end{align}
 which vanishes when $\varphi_2$ satisfies \eqref{eq:varphi2_PDE}. This allows us to conclude the proof.
 \end{proof}
@@ -685,8 +711,9 @@ Applying \cref{prop:gen_subtraction} together with the decay estimates from \cre
 \label{cor:gk_equiv}
 Under the assumptions of \cref{prop:gen_subtraction} as well as~\cref{as:decay_semigroup,as:L_stability}, there exists~$C\in\R^+$ such that, for any $T>0$ and $\eta \in [-\eta_*, \eta_*] \setminus \{0\}$,
 \begin{equation}
+\notag
 	\left|\E\paren*{\aTSest} - \rho\right| \leq C\paren*{\eta^\alpha + \frac{\e^{-\lambda T}}{\eta}},
-\label{eq:gk_cor_statement}
+%\label{eq:gk_cor_statement}
 \end{equation}
 where $\aTSest$ is defined as \eqref{eq:ts_estimator} with the dynamics \eqref{eq:sub_dyn} and $\Phi_\eta^\alpha$ given by \eqref{eq:Phi_alpha}.
 \end{corollary}
@@ -700,24 +727,27 @@ This result, obtained as a direct consequence of \cref{prop:gen_subtraction}, sh
 \begin{proof}[Proof of \cref{cor:gk_equiv}]
 	Fix $\eta \in [-\eta_*, \eta_*] \setminus \{0\}$. Since $R$ has average 0 with respect to $\mu$, it holds that
 \begin{align}
+\notag
 \left|\E\paren*{\aTSest} - \rho\right| &= \frac{1}{\eta}\Biggl|\int_0^T \E\bigl(R(X^\eta_t)\bigr) \, dt - \eta\rho\Biggr| \\
+\notag
 &= \frac{1}{\eta}\Biggl|\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \int_T^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \eta\rho\Biggr| \\
 &\leq \frac{1}{\eta}\abs*{\int_0^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt - \eta\rho} + \frac{1}{\eta}\abs*{\int_T^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt}.
 \label{eq:bias_prop_eq1}
 \end{align}
 We first consider the second term in \eqref{eq:bias_prop_eq1}. By the semigroup definition of the expectation and the fact that~$\psip = \Phi_\eta\#\mu$, it holds that
 \begin{align}
+\notag
 		\abs*{\int_T^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt} &= \abs*{\int_T^{+\infty} \int_\mathcal{X} \bigl(\e^{t\L} R\bigr) \circ \Phi_\eta \, d\mu \, dt}.
-		\label{eq:trunc_bias_eq}
+%		\label{eq:trunc_bias_eq}
 \end{align}
 To bound the above quantity, we apply the semigroup decay estimate~\eqref{eq:decay} and use~\eqref{eq:lyap_composition_cor}: 
-\begin{align}
+\begin{align*}
 		\abs*{\int_T^{+\infty} \E\bigl(R(X^\eta_t)\bigr) \, dt} &\leq \int_T^{+\infty} \int_\mathcal{X} \abs*{\bigl(\e^{t\L} R\bigr) \circ \Phi_\eta} \, d\mu \, dt \\
 		&\leq \int_T^{+\infty} \int_\mathcal{X} \norm*{\e^{t\L} R}_{B^\infty_n} \mathcal{K}_n \circ \Phi_\eta \, d\mu \, dt \\
 		&\leq \int_T^{+\infty} \norm*{\e^{t\L} R}_{B^\infty_n} \int_\mathcal{X} \mathcal{K}_n\paren*{\norm{\Phi_\eta}_{B^\infty_{n'}} \mathcal{K}_{n'}} \, d\mu \, dt \\
 		&\leq \norm{R}_{B^\infty_n}\int_T^{+\infty} L_n C_{n,n',\eta^*} \e^{-\lambda_n t} \paren*{\int_\mathcal{X} \mathcal{K}_m \, d\mu} \, dt \\
 		&\leq \norm{R}_{B^\infty_n}\widetilde{C}_{m,n,n',\eta^*}\int_T^{+\infty} \e^{-\lambda_n t} \, dt \\
-  &= \frac{\norm{R}_{B^\infty_n}\widetilde{C}_{m,n,n',\eta^*}\e^{-\lambda_n T}}{\lambda_n}. \end{align}
+  &= \frac{\norm{R}_{B^\infty_n}\widetilde{C}_{m,n,n',\eta^*}\e^{-\lambda_n T}}{\lambda_n}. \end{align*}
 We now consider the first term on the right-hand side of \eqref{eq:bias_prop_eq1}. 
 Once again applying the semigroup definition of the expectation as well as the operator identity~\eqref{eq:op_identity}, it holds that
 \begin{align}
@@ -727,6 +757,7 @@ Once again applying the semigroup definition of the expectation as well as the o
 	\end{align}
 Writing the expectation in terms of the semigroup, and in view of the operator identity~\eqref{eq:op_identity}, we write the Green--Kubo formula~\eqref{eq:gk} as
 \begin{align}
+    \notag
 		\rho = \int_0^{+\infty} \E_\mu\bigl(R(Y_t^0)S(Y_0^0)\bigr) \, dt = \int_\mathcal{X} (-\L^{-1}R)S \, d\mu.
 	\end{align}
 Thus, by \cref{prop:gen_subtraction} with $f = -\L^{-1}R \in \S_0$, it follows that
@@ -771,18 +802,21 @@ Variance reduction is obtainable for synchronous coupling even without strong co
 \begin{proof}[Proof of \cref{prop:var_ts}]
 It suffices to consider the estimator \eqref{eq:ts_estimator} for $K=1$, since $\Var(\aTSest) = K^{-1}\Var(\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub})$. To simplify the notation, we write $\asTSest$ instead of $\widehat{\rho}^{T,1,\eta,\alpha}_{\rm sub}$:
 \begin{equation}
+\notag
 		\asTSest = \frac{1}{\eta}\int_0^T (R(X_t^\eta) - R(Y_t^0)) \, dt.
 	\end{equation}
 Since $R$ is Lipschitz, and using \cref{lemma:decoupling_times} to bound the coupling distance $|X_t^\eta - Y_t^0|$ in terms of the initial distance $|X_0^\eta - Y_0^0|$, we have
 \begin{align}
-		\label{eq:rhoLipschitz}
+\notag
+%		\label{eq:rhoLipschitz}
 		\abs*{\asTSest} \leq \RLip \int_0^T \frac{|X_t^\eta - Y_t^0|}{\eta} \, dt \leq \RLip \int_0^T \frac{\e^{tB}|X_0^\eta - Y_0^0|}{\eta} \, dt.
 \end{align}
 We next bound the variance as
 \begin{align}
+\notag
 		\Var\paren*{\asTSest} 
 \leq \E\bkt*{\abs*{\asTSest}^2} = \RLip^2\E\bkt*{\abs*{\int_0^T \frac{\e^{tB}|X_0^\eta - Y_0^0|}{\eta} \, dt}^2},
-		\label{eq:var_integral_bound}
+%		\label{eq:var_integral_bound}
 	\end{align}
 which leads to the desired result.
 \end{proof}
@@ -809,6 +843,7 @@ In order to quantify the variance of this estimator, we introduce the Poisson eq
 \]
 The dominant term on the right hand side of the previous equality is the time integral. By a straightforward adaptation of the proof of~\cite[Proposition~2.3]{pavliotis2024}, one can then show that
 \begin{equation}
+%\notag
   \label{eq:asymptotic_variance_TTCF}
   \lim_{t \to +\infty} \frac{\Var(\TestTTCFcenter)}{t} = \|S\|^2_{L^2(\mu)} \left\|\sigma^\top \nabla\mathcal{R}_\eta\right\|_{L^2(\mu_\eta)}.
 \end{equation}
@@ -844,7 +879,9 @@ We remark that the formal definition of $S$ is based on the associated nonequili
 
 Having identified the appropriate conjugate response function~$S$, one can now construct the map~$\Phi_\eta^\alpha$, for~$\alpha=1,2$, by solving the associated PDEs~\eqref{eq:varphi1_PDE} and~\eqref{eq:varphi2_PDE}. 
 
-\paragraph{First-order map $\varphi_1$} For convenience, let us first recall the expression for \eqref{eq:varphi1_PDE}: \begin{equation}
+\paragraph{First-order map $\varphi_1$} For convenience, let us first recall the expression for \eqref{eq:varphi1_PDE}: 
+\begin{equation}
+\notag
 	\nabla^*\varphi_1 = \sum_{i=1}^d \partial_{x_i}^* \varphi_{1,x_i} = S.
  \end{equation}
 For Langevin dynamics, it is natural to consider the position and momentum components of $\varphi_1$ by writing $\varphi_1(q,p) = (\varphi_{1,q}(q,p), \varphi_{1,p}(q,p))$, so that we can write $\nabla^*\varphi_1 = \nabla^*_q\varphi_{1,q} + \nabla^*_p\varphi_{1,p}$. More precisely, the action of the adjoint operators are given by
@@ -854,6 +891,7 @@ For Langevin dynamics, it is natural to consider the position and momentum compo
 \end{equation}
 which can be obtained via integration by parts as in \eqref{eq:Astar_adjoint}. In view of \eqref{eq:nabla_star_expressions} and \eqref{eq:conj_res}, we can write~\eqref{eq:varphi1_PDE} more explicitly for Langevin dynamics as
 \begin{equation}
+\notag
 	-\Div_q(\varphi_{1,q}) - \Div_p(\varphi_{1,p}) + \beta \nabla V^\t \varphi_{1,q} + \beta p^\t M^{-1} \varphi_{1,p} = \beta F(q)^\t M^{-1} p.
 \end{equation}
 Therefore, a natural solution for \eqref{eq:varphi1_PDE} in any dimension is
@@ -878,10 +916,11 @@ Thus, constructing the initial conditions for a first-order transient trajectory
 
 \paragraph{Second-order map $\varphi_2$} Constructing the second-order map amounts to finding~$\varphi_2$ by solving~\eqref{eq:varphi2_PDE}, which we recall for convenience:
 \begin{equation}
+\notag
 	\nabla^*\varphi_2 = -\frac{1}{2}\sum_{i,j=1}^d \partial_{x_i}^*\partial_{x_j}^* (\varphi_{2,x_i}\varphi_{2,x_j}) = -\frac{1}{2}(\nabla^*)^2 \colon \varphi_1\otimes \varphi_1.
 \end{equation}
 Substituting the solution \eqref{eq:varphi1_sol} for $\varphi_1$ in \eqref{eq:varphi2_PDE} leads to
-\begin{align}
+\begin{align*}
     \nabla^*\varphi_2 &= -\frac{1}{2}(\nabla^*)^2\colon 
     \begin{pmatrix}
         0 \\ F    
@@ -889,17 +928,18 @@ Substituting the solution \eqref{eq:varphi1_sol} for $\varphi_1$ in \eqref{eq:va
     \begin{pmatrix}
         0 \\ F    
     \end{pmatrix} \equiv -\frac{1}{2}(\nabla_p^*)^2 \colon F\otimes F.
-\end{align}
+\end{align*}
 Thus, as in the first-order case, one can choose $\varphi_{2,q} = 0$ so that $\varphi_2 = (0, \varphi_{2,p}(q,p))$. Next, recalling that~$\partial^*_{p_i} = -\partial_{p_i} + \beta (M^{-1}p)_i$,
-\begin{align}
+\begin{align*}
     -\frac{1}{2}(\nabla_p^*)^2 \colon F\otimes F &= -\frac{1}{2}\sum_{i,j=1}^d \partial_{p_i}^*\partial_{p_j}^* \paren*{F_i F_j} \\
     &= -\frac{\beta}{2}\sum_{i,j=1}^d \bkt*{-\partial_{p_i} + \beta (M^{-1}p)_i}(M^{-1}p)_j F_i F_j \\
     &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_i F_j + \frac{\beta}{2} \sum_{i,j=1}^d \partial_{p_i}(M^{-1}p)_j F_iF_j \\
     &= -\frac{\beta^2}{2}\sum_{i,j=1}^d (M^{-1}p)_i(M^{-1}p)_j F_i F_j +\frac{\beta}{2}\sum_{i,j=1}^d [M^{-1}]_{j,i} F_i F_j \\
     &= -\frac{1}{2}\paren*{\beta p^\t M^{-1}F}^2 + \frac{1}{2}\beta F^\t M^{-1}F.
-\end{align}
+\end{align*}
 Thus, a possible solution for the second-order term $\varphi_2$ is
 \begin{equation}
+\notag
     \varphi_2(q,p) = 
     \begin{pmatrix}
         0 \\ -\dfrac{\beta F(q)^\t M^{-1} p}{2}F(q)
@@ -934,8 +974,9 @@ where we used that~$\mathcal{R} = -\L^{-1}R$ has average~0 with respect to~$\mu$
 
 \paragraph{Choice of observable} We consider $\mathcal{X} = 2\pi \T \times \R$ and the following observable, which has average 0 with respect to~$\mu$ by construction: 
 \begin{equation}
+\notag
 	R(q,p) = \paren*{\cos(q) - \sin(q)} \, \e^{\beta V(q)}.
-	\label{eq:R_observable}
+%	\label{eq:R_observable}
 \end{equation}
 This choice is also considered in order to avoid symmetries in the response function (which may occur for typical observables such as $p$ and $\nabla V$) so that the results are clearly presented; see \cite[Section~4.2]{spacek2023}, for a more detailed discussion regarding the symmetries and the observable. Furthermore, the forcing $F$ in consideration is a normalized constant force, i.e., $F = 1$.
 
@@ -943,6 +984,7 @@ This choice is also considered in order to avoid symmetries in the response func
 
 We consider two maps $\Phi_\eta^\alpha$, for $\alpha=1,2$, constructed from $\varphi_1$ and $\varphi_2$ obtained in \cref{subsec:num_lang}, as given by~\eqref{eq:Phi1_map} and~\eqref{eq:Phi2_map},
 \begin{equation}
+\notag
 \begin{cases}
 \begin{aligned}
 	&\Phi_\eta^1(q,p) = (q, p + \eta), \\
@@ -963,6 +1005,7 @@ The bias \eqref{eq:bias_1d-lang} was computed for various values of $\eta$. The 
 \label{subsec:num_LJ}
 We next present some numerical results highlighting the variance-reduction potential of the transient subtraction method. The example in consideration is the computation of shear viscosity and mobility for a Lennard--Jones fluid. The system is composed of~$N$ particles in spatial dimension $D=3$ (so that~$d=3N$), evolving according to the underdamped Langevin dynamics \eqref{eq:lang_dynamics} on the domain $\mathcal{X} = (L\T)^{3N} \times \R^{3N}$. The potential energy corresponds to the sum of pairwise interactions
 \begin{equation}
+\notag
 	V(q) = \sum_{1\leq i<j\leq N} v(\norm{q_i - q_j}),
 \end{equation}
 with $v(r)$ given by the standard 12-6 Lennard--Jones interaction potential:
@@ -973,6 +1016,7 @@ with $v(r)$ given by the standard 12-6 Lennard--Jones interaction potential:
 The parameter $\varepsilon$ represents the depth of the potential well, and $\sigma$ determines the length scale (more precisely, $v'(2^{1/6}\sigma)=0$ so that interactions are attractive or repulsive depending on whether the distance is larger or smaller than $2^{1/6}\sigma$).
 In practice, one truncates the range of~\eqref{eq:LJ_pairwise} at some value $r_\mathrm{c}$, after which interactions can be deemed negligible. We employ the truncated shifted-force cutoff method with a cutoff value of~$r_\mathrm{c}=2.5\sigma$, resulting in the modified potential
 \begin{equation}
+\notag
 	v_\mathrm{SF}(r) = [v(r) - v(r_\mathrm{c}) - (r - r_\mathrm{c})v'(r_\mathrm{c})]\ind_{r\leq r_\mathrm{c}}.
 \end{equation}
 We numerically integrate the Langevin dynamics \eqref{eq:lang_dynamics} using the BAOAB splitting scheme~\cite{leimkuhler2013}, which allows to consistently sample the canonical measure. The simulations were conducted using with the \texttt{Molly.jl} package \cite{greener2024} in the Julia language, and were performed in dimensionless reduced units with $\sigma = \varepsilon = k_\mathrm{B} = 1$ and the mass matrix~$M = \mathrm{Id}$ on a cubic domain with side length $L = (N/\varrho)^{1/3}$, with $\varrho$ the particle density. For both shear viscosity and mobility computations, the results we present correspond to averages over $K = 10^5$ realizations of the system with i.i.d.\ initial conditions. 
@@ -991,6 +1035,7 @@ We next describe the strategy for initializing and evaluating the trajectories, 
 where the expression for $F(q)$ is made precise for mobility and shear viscosity in \cref{subsubsec:mobility_num,subsubsec:shear}, respectively. The equilibrium and transient trajectories are then evolved simultaneously according to synchronously coupled standard equilibrium dynamics. The integration time $T$ should not be much larger than the relaxation time of the transient trajectory, as decoupling becomes a significant source of error. Nevertheless, this can be overcome during postprocessing, during which one can choose the appropriate truncation time for the estimator. 
 Observational runs should be performed beforehand to have an approximate idea of the order of magnitude of the relaxation time (which varies significantly depending on the system at hand), which can be deduced from reasonably coarse and inexpensive runs. All simulation parameters are made precise in \cref{table:sim_params}.
 \begin{table}[h!]
+\centering
 \begin{tabular}{@{}lcc@{}}
 	\toprule
 	\bf{Parameter} & {\bf Shear} & {\bf Mobility} \\
@@ -1017,10 +1062,12 @@ Integration time ($T$) & 3.5 & 2.0 \\
 \label{subsubsec:mobility_num}
 When under the effect of a constant external field $F$, the mobility quantifies the particles' average velocity in the direction of the applied field. In our Lennard--Jones fluid example, we consider a constant force applied in the $x$-direction, and in particular we consider colored drift, which amounts to perturbing half the particles to one direction, and the other half in the opposite direction \cite{evans2007}:
 \begin{equation}
+\notag
 	F = \frac{1}{\sqrt{N}}(F_1,F_2,\dotsc,F_N)^\t \in \R^{3N}, \qquad F_i = ((-1)^{i+1}, 0, 0), \qquad i = 1,\dotsc,N.
 \end{equation}
 The observable we consider is the velocity in the direction $F$, a standard choice for mobility computations \cite[Section 5.2.2]{lelievre2016}:
 \begin{equation}
+\notag
 	R(q,p) = F^\t M^{-1}p.
 \end{equation}
 \begin{figure}[h!]
@@ -1083,6 +1130,7 @@ To quantitatively assess the variance reduction and the decoupling effect, we co
 \label{subsubsec:shear}
 The shear viscosity of a fluid can be computed in a variety of ways; see \cite{todd2007} for a review on computational techniques. In this work, we consider a setting based on the transverse force-field method \cite{gosling1973,joubaud2012} with a sinusoidal forcing profile with spatial domain $(L_x\T \times L_y\T \times L_z\T)^N$. We denote by~$F_i\in\R^3$ the force acting on the $i$th particle:
 \begin{equation}
+\notag
     F_i = (f(q_{i,y}), 0, 0)^\t, \qquad  f(y) = \sin\paren*{\frac{2\pi y}{L_y}}.
 \end{equation}
 The force acts on the $x$-component of the momenta based on the particle's $y$-coordinate position.
